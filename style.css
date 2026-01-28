@@ -8,10 +8,15 @@ body {
   display: flex;
   justify-content: center;
   margin-top: 60px;
+  flex-wrap: wrap;
 }
 
 /* card */
 .card-cartoon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   width: 280px;
   background: #fff;
   border: 4px solid #222;
