@@ -1,0 +1,15 @@
+body {
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+}
+#board {
+    background-color: skyblue;
+    background-image: url("assets/images/flappybirdbg.png");
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    touch-action: none; 
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
