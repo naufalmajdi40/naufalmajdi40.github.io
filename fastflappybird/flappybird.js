@@ -33,7 +33,7 @@ let bottomPipeImg;
 
 
 //physics
-let velocityX = -20 // pipes moving
+let velocityX = -5 // pipes moving
 let velocityY = 0 //bird moving
 let gravity = 0.4
 let rotate = 2
@@ -57,21 +57,11 @@ window.onload = function () {
     board.height = boardHeight
     board.width = boardWidth
     context = board.getContext('2d') //used for drawing on the board
-    // bgm.play()
-    //draw the bird
-    // context.fillStyle = 'red'
-    // context.fillRect(bird.x, bird.y, bird.width, bird.height)
     for (let i = 0; i < 4; i++) {
         let birdImg = new Image()
         birdImg.src = `assets/images/flappybird${i}.png`
         birdImgs.push(birdImg)
     }
-    //loadImage
-    // birdImg = new Image()
-    // birdImg.src = "./flappybird.png"
-    // birdImg.onload = function () {
-    //     context.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height)
-    // }
 
     topPipeImg = new Image()
     topPipeImg.src = "assets/images/toppipe.png"
@@ -80,7 +70,7 @@ window.onload = function () {
     bottomPipeImg.src = "assets/images/bottompipe.png"
 
     requestAnimationFrame(update)
-    setInterval(placePipes, 600) //every 1.5
+    setInterval(placePipes, 800) //every 1.5
     setInterval(animateBird, 100)
     this.document.addEventListener('keydown', moveBird)
     this.document.addEventListener('click', moveBirdClick)
