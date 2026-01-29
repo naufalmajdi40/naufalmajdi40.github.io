@@ -1,6 +1,6 @@
 const game = [
     {
-        title: "Typing JS Game",
+        title: "Typing JS Game (PC Only)",
         desc: "Test your typing skills and Javascript skill with this simple game",
         icon: "assets/typingjs.png",
         link: "typingjs/index.html"
