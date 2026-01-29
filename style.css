@@ -83,6 +83,7 @@ body {
   box-shadow: 0 2px 0 #b36b00;
 }
 .footer-fixed {
+  line-height: 0px;
   position: fixed;
   line-height: 0.2;
   bottom: 0;

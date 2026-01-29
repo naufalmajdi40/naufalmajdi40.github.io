@@ -1,0 +1,36 @@
+.input-cartoon {
+  width: 200px;
+    padding-top: 12px;
+    padding-left: 14px;
+    padding-right: 14px;
+    padding-bottom: 16px;
+  font-size: 22px;
+
+  background: #f5deb3; /* warna pasir */
+  color: #5a3e1b;
+
+  border: 4px solid #d2b48c;
+  border-radius: 16px;
+
+  outline: none;
+
+  box-shadow: 
+    4px 4px 0 #c2a679,
+    inset 2px 2px 0 #fff2d9;
+
+  transition: all 0.2s ease;
+}
+.input-cartoon:focus {
+  background: #fff1cc;
+  border-color: #b89564;
+
+  box-shadow: 
+    2px 2px 0 #b89564,
+    inset 2px 2px 0 #ffffff;
+
+  transform: translate(2px, 2px);
+}
+.input-cartoon::placeholder {
+  color: #9c7b4a;
+  font-style: italic;
+}

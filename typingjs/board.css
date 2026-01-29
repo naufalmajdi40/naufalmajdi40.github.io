@@ -1,0 +1,10 @@
+#board {
+    position: relative;
+    overflow: hidden;
+     margin-top: -15px;
+    background: linear-gradient(
+        180deg,
+        #1e90ff 0%,
+        #0b4dbb 100%
+    );
+}

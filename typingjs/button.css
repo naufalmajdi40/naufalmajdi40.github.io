@@ -1,0 +1,87 @@
+.btn-sea {
+  font-family: 'Poppins', 'Comic Sans MS', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  padding: 5px 42px;
+  color: #ffffff;
+
+  background: linear-gradient(
+    180deg,
+    #6ec6ff 0%,
+    #1e90ff 50%,
+    #0b4dbb 100%
+  );
+
+  border: 4px solid #063970;
+  border-radius: 20px;
+  cursor: pointer;
+
+  box-shadow:
+    0 6px 0 #063970,
+    0 10px 18px rgba(0, 0, 0, 0.35);
+
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+/* Hover – sedikit naik */
+.btn-sea:hover {
+  transform: translateY(2px);
+  box-shadow:
+    0 4px 0 #063970,
+    0 8px 14px rgba(0, 0, 0, 0.3);
+}
+
+/* Active – ditekan */
+.btn-sea:active {
+  transform: translateY(6px);
+  box-shadow:
+    0 0 0 #063970,
+    0 3px 6px rgba(0, 0, 0, 0.25);
+}
+
+.dark-sand-btn {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fdf6e3;
+
+  padding: 12px 38px;
+  border-radius: 14px;
+  border: 3px solid #8a6a2f;
+  cursor: pointer;
+
+  background: linear-gradient(
+    180deg,
+    #d1b36a 0%,
+    #b8964b 55%,
+    #805912 100%
+  );
+
+  box-shadow:
+    0 4px 0 #6e5324,
+    0 6px 10px rgba(0, 0, 0, 0.3);
+
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+/* hover */
+.dark-sand-btn:hover {
+  transform: translateY(1px);
+  box-shadow:
+    0 3px 0 #6e5324,
+    0 5px 8px rgba(0, 0, 0, 0.25);
+}
+
+/* active */
+.dark-sand-btn:active {
+  transform: translateY(4px);
+  box-shadow:
+    0 0 0 #6e5324,
+    0 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+/* focus */
+.dark-sand-btn:focus {
+  outline: none;
+  border-color: #e0c37a;
+}

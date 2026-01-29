@@ -8,18 +8,28 @@ let sharkArray = []
 let sharkImg
 let sharkImgs = []
 let sharkImgsIndex = 0;
+
 let sharkWidth = 200;
 let sharkHeight = 100;
+
+
 let sharkX = boardWidth - 200;
 let sharkY = 20
-
+let posTextX = 200
+let posTextY = 60
 let textbox;
 let score = 0;
 let nyawa = 5;
 let highScore = 0
 let gameOver = false;
 let addInterval = 6000
-
+if (isMobile()) {
+    sharkWidth = 100;
+    sharkHeight = 50;
+    posTextX = 100
+    posTextY = 30
+    // sharkX = boardWidth - 300
+}
 //sound system
 const pointSound = new Audio("assets/sfx_point.wav");
 const wrongSound = new Audio("assets/sfx_die.wav");
@@ -57,7 +67,7 @@ function update() {
         context.drawImage(sharkImgs[sharkImgsIndex], shark.x, shark.y, sharkWidth, sharkHeight);
         context.font = "30px Arial black";
         context.fillStyle = "white";
-        context.fillText(shark.text, shark.x + 200, shark.y + 60);
+        context.fillText(shark.text, shark.x + posTextX, shark.y + posTextY);
     }
 
     //remove shark if it goes out of the board
@@ -153,6 +163,8 @@ function changeAnimationShark() {
 }
 function start() {
     let input = document.getElementById("inputBox")
+    let enter = document.getElementById("enter")
+    enter.hidden = false
     const level = document.getElementById("level").value
     velocityX = velocityX - parseInt(level)
     addInterval = addInterval + (velocityX * 350)
@@ -167,6 +179,20 @@ function start() {
     this.setInterval(changeAnimationShark, 60);
     requestAnimationFrame(update);
 
+}
+function enter() {
+    const enterEvent = new KeyboardEvent("keydown", {
+        key: "Enter",
+        code: "Enter",
+        keyCode: 13,
+        which: 13,
+        bubbles: true
+    });
+
+    document.dispatchEvent(enterEvent);
+}
+function isMobile() {
+    return window.innerWidth <= 768;
 }
 const syntacs = [
     `let a`,

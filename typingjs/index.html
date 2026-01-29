@@ -7,29 +7,40 @@
   <title>Typing JS Game</title>
   <link rel="icon" type="image/x-icon" href="assets/icon.png">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="board.css">
+  <link rel="stylesheet" href="button.css">
+  <link rel="stylesheet" href="select.css">
+  <link rel="stylesheet" href="input.css">
   <script src="service.js"></script>
   <script slot="modal.js"></script>
 </head>
 
 <body>
-  <canvas id="board"></canvas>
+  <canvas id="board">
+    <div class="wave wave1"></div>
+    <div class="wave wave2"></div>
+    <div class="wave wave3"></div>
+  </canvas>
 
   <div class="typingBoard">
-    <h4>Isilah text pada form berikut: Untuk Ok tekan enter</h4>
+    <!-- <h4>Isilah text pada form berikut: Untuk Ok tekan enter</h4> -->
+    <br>
     <h1 hidden id="typeData">test</h1>
-    <input type="text" hidden id="inputBox" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+    <input type="text" class="input-cartoon" hidden id="inputBox" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
     <div id="levelCard"> <label for="level">Pilih Level</label>
-      <select name="level" id="level">
+      <select class="sand-select" name="level" id="level">
         <option value="2">Junior</option>
         <option value="4">Middle</option>
         <option value="6">Senior</option>
         <option value="8">Expert</option>
         <option value="10">God</option>
       </select>
-      <Button class="btn-start" id="start" onclick="start()"> Start</Button>
+      <Button class="dark-sand-btn" id="start" onclick="start()"> Start</Button>
+
     </div>
 
-    <Button class="btn-start" hidden id="restart" onclick="restart()"> Restart</Button>
+    <Button hidden id="enter" class="dark-sand-btn" onclick="enter()" style="font-size: 32px; margin-top: 10px;">ENTER </Button>
+    <Button class="dark-sand-btn" style="font-size: 32px;" hidden id="restart" onclick="restart()"> Restart</Button>
   </div>
 
 </body>
