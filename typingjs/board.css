@@ -1,7 +1,9 @@
 #board {
+    width: 100%;
+     border: 8px solid #0b4dbb;
     position: relative;
     overflow: hidden;
-     margin-top: -15px;
+     margin-top: -20px;
     background: linear-gradient(
         180deg,
         #1e90ff 0%,

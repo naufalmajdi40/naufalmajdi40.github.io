@@ -1,4 +1,4 @@
-let boardWidth = window.innerWidth;
+let boardWidth = window.innerWidth
 let boardHeight = 720;
 let context;
 let velocityX = 0
@@ -28,6 +28,7 @@ if (isMobile()) {
     sharkHeight = 50;
     posTextX = 100
     posTextY = 30
+    boardHeight = 320
     // sharkX = boardWidth - 300
 }
 //sound system
