@@ -47,7 +47,7 @@ class Game {
     }
     initEvent() {
         this.board.addEventListener("mousemove", e => this.onMouse(e));
-        this.board.addEventListener("touchstart", e => this.onTouch(e), { passive: false });
+        this.board.addEventListener("touchstart", (e) => { this.onTouch(e), { passive: false }; this.start(); });
         this.board.addEventListener("touchmove", e => this.onTouch(e), { passive: false });
         this.board.addEventListener("click", e => this.start());
     }
