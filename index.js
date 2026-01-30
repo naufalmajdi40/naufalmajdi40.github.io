@@ -1,5 +1,11 @@
 const game = [
     {
+        title: "Eat or Be Eaten",
+        desc: "Game Makan atau dimakan. tentukan pilihanmu",
+        icon: "assets/ikanlapar.png",
+        link: "ikanlapar/index.html"
+    },
+    {
         title: "Typing JS Game (PC Only)",
         desc: "Test your typing skills and Javascript skill with this simple game",
         icon: "assets/typingjs.png",
@@ -17,6 +23,7 @@ const game = [
         icon: "assets/snake.png",
         link: "snake/index.html"
     },
+
 ]
 window.onload = () => {
     let gameList = document.getElementById("card-container");

@@ -1,0 +1,5 @@
+#board{
+   font-family: 'Courier New', Courier, monospace; 
+   background-image: url("assets/images/bg/sea.jpg");
+   cursor:grab;
+}
