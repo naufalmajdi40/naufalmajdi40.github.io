@@ -13,7 +13,7 @@ class Game {
         this.board.width = this.boardW;
         this.board.height = this.boardH;
         this.started = false;
-        this.mouse = { x: 200, y: this.boardH / 2 };
+        this.mouse = { x: 0, y: this.boardH / 2 };
         this.gameOver = false;
 
         this.playerImg = new Image();
@@ -154,8 +154,6 @@ class Game {
     }
 
     start() {
-        // if (this.started) return;
-        // if (this.bgm.paused) {
         if (this.gameOver) {
             // this.started = false
             console.log("restart")
@@ -171,11 +169,9 @@ class Game {
         }
         if (!this.started) {
             this.bgm.play();
-
             this.started = true;
             this.bgm.currentTime = 0
             this.started = true;
-
             setInterval(() => this.spawnShark(), 500);
             setInterval(() => this.spawnCoin(), 1500);
             setInterval(() => this.animate(), 1000 / 12);
