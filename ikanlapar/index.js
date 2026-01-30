@@ -6,7 +6,7 @@ class Game {
         this.ctx = this.board.getContext("2d");
         this.scoreBoard = document.getElementById("score")
         this.boardW = window.innerWidth;
-        this.boardH = 1280;
+        this.boardH = window.innerHeight;
         this.board.width = this.boardW;
         this.board.height = this.boardH;
         this.started = false;
