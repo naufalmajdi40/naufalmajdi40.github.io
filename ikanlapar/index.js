@@ -5,8 +5,11 @@ class Game {
 
         this.ctx = this.board.getContext("2d");
         this.scoreBoard = document.getElementById("score")
-        this.boardW = window.innerWidth;
+        this.boardW = window.innerHeight / 2
         this.boardH = window.innerHeight;
+        if (!this.isMobile) {
+            this.boardW = window.innerWidth;
+        }
         this.board.width = this.boardW;
         this.board.height = this.boardH;
         this.started = false;
@@ -183,9 +186,10 @@ class Game {
 
     }
     animate() {
-        // this.player.animate();
-
         this.sharks.forEach(shark => shark.animate());
+    }
+    isMobile() {
+        return window.innerWidth <= 768;
     }
 }
 window.onload = () => new Game();
