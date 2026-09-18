@@ -25,12 +25,20 @@ const game = [
     },
 
 ]
-const software = [{
-    title: "ZTL Designer",
-    desc: "Sofware untuk Design Printer Zebra ",
-    icon: "assets/zplstudio.png",
-    link: "ztldesigner/ztldesigner.html"
-}]
+const software = [
+    {
+        title: "ZTL Designer",
+        desc: "Sofware untuk Design Printer Zebra ",
+        icon: "assets/zplstudio.png",
+        link: "ztldesigner/ztldesigner.html"
+    },
+    {
+        title: "GLB Viewer",
+        desc: "Sofware untuk Melihat file 3D GLB",
+        icon: "assets/glbviewer.png",
+        link: "glbviewer/index.html"
+    }
+]
 window.onload = () => {
     let gameList = document.getElementById("card-container");
     let softwareList = document.getElementById("card-container2");
