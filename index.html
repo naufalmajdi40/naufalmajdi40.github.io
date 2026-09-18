@@ -1,32 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Developed Game</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="index.js"></script>
+  <title>Portofolio - Asyik Studio</title>
+  <!-- Google Fonts: Inter untuk kesan profesional dan bersih -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+ <script src="index.js"></script>
+ <link rel="stylesheet" href="style.css">
+  <style>
+    
+  </style>
 </head>
 
 <body>
-  <h2 style="text-align: center; color: #000; font-size: 2rem; margin-bottom: 2rem;">Hasil Belajar Membuat game </h2>
 
-  <div class="card-container" id="card-container">
-
-  </div>
-  <br>
-  <br>
-
-  <br>
-  <footer class="footer-fixed">
-
-    <p> © 2026 Asyik Studio. All rights reserved.</p>
-    <p>Referensi Belajar : </p>
-    <a style="color: white;" href="https://www.kennyyipcoding.com">https://www.youtube.com/KennyYipCoding</a>
-
+  <!-- NAVBAR -->
+  <nav>
+    <a href="#" class="logo">AsyikStudio.</a>
+    <div class="nav-links">
+      <a href="#karya">Portofolio</a>
+      <a href="#tentang">Tentang</a>
+      <a href="#kontak">Kontak</a>
     </div>
-  </footer>
-</body>
+  </nav>
 
+  <!-- HERO SECTION -->
+  <header class="hero">
+    <h1>Halo, Saya Developer & Kreator.</h1>
+    <p>Saya membangun pengalaman digital interaktif, mengembangkan perangkat lunak yang efisien, dan merangkai karya kreatif yang memukau.</p>
+    <a href="#karya" class="btn-primary">Lihat Karya Saya</a>
+  </header>
+
+  <!-- PORTFOLIO SECTION -->
+  <section id="karya" class="portfolio-section">
+    <h2 class="section-title">Hasil Karya & Belajar</h2>
+
+    <!-- Kategori 1: Game Development -->
+    <h3 class="category-title">Game & Naratif Interaktif</h3>
+    <div class="grid-container card-container" id="card-container"></div>
+    <h3 class="category-title">Software Development</h3>
+    <div class="grid-container" id="card-container2">
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="kontak">
+    <h3 style="margin-bottom: 1rem;">Mari Berkolaborasi</h3>
+    <p>Membangun proyek kreatif dan solusi digital.</p>
+    <br>
+    <p>© 2026 Asyik Studio. All rights reserved.</p>
+  </footer>
+
+</body>
 </html>

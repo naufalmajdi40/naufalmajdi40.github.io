@@ -25,19 +25,44 @@ const game = [
     },
 
 ]
+const software = [{
+    title: "ZTL Designer",
+    desc: "Sofware untuk Design Printer Zebra ",
+    icon: "assets/zplstudio.png",
+    link: "ztldesigner/ztldesigner.html"
+}]
 window.onload = () => {
     let gameList = document.getElementById("card-container");
+    let softwareList = document.getElementById("card-container2");
+
     game.forEach((item) => {
         gameList.innerHTML += `
-            <div class="card-cartoon">
-                <img src="${item.icon}" class="card-img" alt="Typing Game JS">
-                <div class="card-body">
-                    <h4>${item.title}</h4>
-                    <p>${item.desc}</p>
-                    <a href="${item.link}" class="btn-cartoon">▶ PLAY</a>
+            <div class="project-card">
+                <div class="card-img-wrapper">
+                    <img class="card-img" src="${item.icon}" alt="${item.title}">
+                </div>
+                <div class="card-content">
+                    <span class="card-tags">Arcade</span>
+                        <h4 class="card-title">${item.title}</h4>
+                        <p class="card-desc">${item.desc}</p>
+                <a href="${item.link}" class="card-link">Mainkan Sekarang <span>&rarr;</span></a>
                 </div>
             </div>
-
-      `
+    `
+    })
+    software.forEach((item) => {
+        softwareList.innerHTML += `
+            <div class="project-card">
+                <div class="card-img-wrapper">
+                    <img class="card-img" src="${item.icon}" alt="${item.title}">
+                </div>
+                <div class="card-content">
+                    <span class="card-tags">Arcade</span>
+                        <h4 class="card-title">${item.title}</h4>
+                        <p class="card-desc">${item.desc}</p>
+                <a href="${item.link}" class="card-link">Run <span>&rarr;</span></a>
+                </div>
+            </div>
+    `
     })
 }
