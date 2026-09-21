@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asyik Editor Pro - Editor Gambar </title>
+    <title>MiniCanva Pro - Editor Gambar Vektor & Mobile Friendly</title>
     
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -43,22 +43,30 @@
         aside::-webkit-scrollbar-thumb { background-color: #e2e8f0; border-radius: 4px; }
     </style>
 </head>
-<body class="h-screen flex overflow-hidden font-sans text-gray-800 bg-white">
+<body class="h-screen flex overflow-hidden font-sans text-gray-800 bg-white relative">
 
     <div id="toastContainer" class="fixed bottom-6 left-1/2 -translate-x-1/2 flex flex-col gap-2 z-[100] pointer-events-none"></div>
 
+    <!-- Backdrop untuk menutup sidebar di mobile -->
+    <div id="mobileBackdrop" onclick="closeMobileSidebars()" class="fixed inset-0 bg-black/40 z-20 hidden md:hidden transition-opacity"></div>
+
     <!-- Sidebar KIRI (Menu Utama) -->
-    <aside class="w-[280px] bg-white border-r border-gray-200 shadow-sm flex flex-col z-20 shrink-0">
+    <aside id="leftSidebar" class="w-[280px] bg-white border-r border-gray-200 shadow-lg md:shadow-sm flex flex-col z-30 shrink-0 fixed md:relative inset-y-0 left-0 transform -translate-x-full md:translate-x-0 transition-transform duration-300">
         <div class="p-5 border-b border-gray-100 flex items-center justify-between shrink-0">
             <div class="flex items-center gap-2">
                 <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white shadow-sm">
                     <i data-lucide="pen-tool" class="w-5 h-5"></i>
                 </div>
-                <h1 class="text-xl font-bold text-gray-900 tracking-tight">Asyik Editor</h1>
+                <h1 class="text-xl font-bold text-gray-900 tracking-tight">MiniCanva</h1>
             </div>
-            <button onclick="clearCanvasStorage()" class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition" title="Reset Kanvas & Storage">
-                <i data-lucide="trash" class="w-4 h-4"></i>
-            </button>
+            <div class="flex items-center gap-1">
+                <button onclick="clearCanvasStorage()" class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition" title="Reset Kanvas & Storage">
+                    <i data-lucide="trash" class="w-4 h-4"></i>
+                </button>
+                <button onclick="toggleLeftSidebar()" class="md:hidden p-1.5 text-gray-500 hover:bg-gray-100 rounded-lg">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
         </div>
         
         <div class="flex-1 overflow-y-auto p-5 flex flex-col gap-6">
@@ -144,43 +152,52 @@
     <main class="flex-1 flex flex-col relative overflow-hidden">
         
         <!-- Header / Global Tools -->
-        <header class="h-16 bg-white border-b border-gray-200 shadow-sm flex items-center justify-between px-4 z-10 shrink-0">
+        <header class="h-16 bg-white border-b border-gray-200 shadow-sm flex items-center justify-between px-3 md:px-4 z-10 shrink-0 gap-2">
             
-            <!-- Drawing & Fill Tools -->
-            <div class="flex items-center gap-1.5">
-                <button id="fillBucketBtn" class="flex items-center gap-1.5 px-3 py-1.5 text-sm bg-gray-50 hover:bg-gray-100 text-gray-700 border border-gray-200 rounded-lg font-medium transition" title="Paint Bucket (Isi Warna)">
-                    <i data-lucide="paint-bucket" class="w-4 h-4"></i> Fill Color
+            <!-- Mobile Menu & Drawing Tools -->
+            <div class="flex items-center gap-1.5 overflow-x-auto toolbar-scroll py-1">
+                <button onclick="toggleLeftSidebar()" class="md:hidden p-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition" title="Menu">
+                    <i data-lucide="menu" class="w-5 h-5"></i>
                 </button>
-                <button id="drawBtn" class="flex items-center gap-1.5 px-3 py-1.5 text-sm bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-lg font-medium transition" title="Draw">
-                    <i data-lucide="brush" class="w-4 h-4"></i> Draw
+                
+                <button id="fillBucketBtn" class="flex items-center gap-1.5 px-2.5 py-1.5 text-xs md:text-sm bg-gray-50 hover:bg-gray-100 text-gray-700 border border-gray-200 rounded-lg font-medium transition whitespace-nowrap" title="Paint Bucket">
+                    <i data-lucide="paint-bucket" class="w-4 h-4"></i> <span class="hidden sm:inline">Fill</span>
                 </button>
-                <button id="eraserBtn" class="flex items-center gap-1.5 px-3 py-1.5 text-sm bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 rounded-lg font-medium transition" title="Eraser">
-                    <i data-lucide="eraser" class="w-4 h-4"></i> Eraser
+                <button id="drawBtn" class="flex items-center gap-1.5 px-2.5 py-1.5 text-xs md:text-sm bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-lg font-medium transition whitespace-nowrap" title="Draw">
+                    <i data-lucide="brush" class="w-4 h-4"></i> <span class="hidden sm:inline">Draw</span>
+                </button>
+                <button id="eraserBtn" class="flex items-center gap-1.5 px-2.5 py-1.5 text-xs md:text-sm bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 rounded-lg font-medium transition whitespace-nowrap" title="Eraser">
+                    <i data-lucide="eraser" class="w-4 h-4"></i> <span class="hidden sm:inline">Eraser</span>
                 </button>
             </div>
 
             <!-- Global Actions -->
             <div class="flex items-center gap-1.5 shrink-0">
-                <button id="undoBtn" class="p-1.5 text-gray-500 hover:bg-gray-100 rounded-md transition opacity-50 cursor-not-allowed" title="Undo (Ctrl+Z)" disabled><i data-lucide="undo" class="w-5 h-5"></i></button>
-                <button id="redoBtn" class="p-1.5 text-gray-500 hover:bg-gray-100 rounded-md transition opacity-50 cursor-not-allowed" title="Redo (Ctrl+Y)" disabled><i data-lucide="redo" class="w-5 h-5"></i></button>
-                <div class="w-px h-6 bg-gray-200 mx-1"></div>
+                <button id="undoBtn" class="p-1.5 text-gray-500 hover:bg-gray-100 rounded-md transition opacity-50 cursor-not-allowed hidden sm:block" title="Undo (Ctrl+Z)" disabled><i data-lucide="undo" class="w-5 h-5"></i></button>
+                <button id="redoBtn" class="p-1.5 text-gray-500 hover:bg-gray-100 rounded-md transition opacity-50 cursor-not-allowed hidden sm:block" title="Redo (Ctrl+Y)" disabled><i data-lucide="redo" class="w-5 h-5"></i></button>
+                <div class="w-px h-6 bg-gray-200 mx-0.5 hidden sm:block"></div>
                 
-                <button onclick="saveProjectAsk()" class="flex items-center gap-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded-lg text-sm font-semibold transition" title="Simpan Project (.ask)">
-                    <i data-lucide="save" class="w-4 h-4"></i> Save .ask
+                <button onclick="saveProjectAsk()" class="p-2 sm:px-3 sm:py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm font-semibold transition flex items-center gap-1.5" title="Simpan Project (.ask)">
+                    <i data-lucide="save" class="w-4 h-4"></i> <span class="hidden sm:inline">Save</span>
                 </button>
                 <input type="file" id="askUpload" class="hidden" accept=".ask">
-                <button onclick="document.getElementById('askUpload').click()" class="flex items-center gap-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded-lg text-sm font-semibold transition" title="Buka Project (.ask)">
-                    <i data-lucide="folder-open" class="w-4 h-4"></i> Buka .ask
+                <button onclick="document.getElementById('askUpload').click()" class="p-2 sm:px-3 sm:py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm font-semibold transition flex items-center gap-1.5" title="Buka Project (.ask)">
+                    <i data-lucide="folder-open" class="w-4 h-4"></i> <span class="hidden sm:inline">Buka</span>
                 </button>
 
-                <button onclick="downloadCanvas()" class="flex items-center gap-1.5 ml-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-1.5 rounded-lg shadow-sm text-sm font-semibold transition">
-                    <i data-lucide="download" class="w-4 h-4"></i> Export PNG
+                <button onclick="downloadCanvas()" class="flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg shadow-sm text-sm font-semibold transition whitespace-nowrap">
+                    <i data-lucide="download" class="w-4 h-4"></i> <span class="hidden sm:inline">Export</span>
+                </button>
+
+                <!-- Tombol Mobile untuk membuka Sidebar Kanan (Properti) -->
+                <button onclick="toggleRightSidebar()" id="mobilePropsBtn" class="md:hidden p-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg transition ml-1" title="Properti Objek">
+                    <i data-lucide="sliders-horizontal" class="w-5 h-5"></i>
                 </button>
             </div>
         </header>
 
         <!-- Area Canvas -->
-        <div class="flex-1 overflow-auto workspace-bg flex justify-center items-center p-8 relative" id="canvasContainer">
+        <div class="flex-1 overflow-auto workspace-bg flex justify-center items-center p-4 sm:p-8 relative" id="canvasContainer">
             
             <!-- Crop Controls Floating UI -->
             <div id="cropControls" class="hidden absolute top-6 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-sm px-4 py-2.5 rounded-xl shadow-2xl border border-emerald-200 z-50 items-center gap-3">
@@ -204,31 +221,36 @@
             </div>
 
             <!-- Kontrol Tampilan & Zoom -->
-            <div class="absolute bottom-6 right-6 bg-white/90 backdrop-blur-sm p-1.5 rounded-xl shadow-lg border border-gray-200 flex items-center gap-1 z-20">
-                <button id="snapToggleBtn" class="flex items-center gap-1.5 px-3 py-1.5 text-sm bg-indigo-50 text-indigo-600 hover:bg-gray-100 hover:text-gray-600 rounded-lg font-medium transition" title="Smart Guides">
+            <div class="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 bg-white/90 backdrop-blur-sm p-1.5 rounded-xl shadow-lg border border-gray-200 flex items-center gap-1 z-20">
+                <button id="snapToggleBtn" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-sm bg-indigo-50 text-indigo-600 hover:bg-gray-100 hover:text-gray-600 rounded-lg font-medium transition" title="Smart Guides">
                     <i data-lucide="magnet" class="w-4 h-4"></i> Snap
                 </button>
-                <div class="w-px h-5 bg-gray-300 mx-1"></div>
+                <div class="w-px h-5 bg-gray-300 mx-1 hidden sm:block"></div>
                 
-                <button id="gridToggleBtn" class="flex items-center gap-1.5 px-3 py-1.5 text-sm bg-transparent hover:bg-gray-100 text-gray-600 rounded-lg font-medium transition" title="Grid Penggaris">
-                    <i data-lucide="grid-3x3" class="w-4 h-4"></i> Grid
+                <button id="gridToggleBtn" class="flex items-center gap-1.5 px-2.5 py-1.5 text-sm bg-transparent hover:bg-gray-100 text-gray-600 rounded-lg font-medium transition" title="Grid Penggaris">
+                    <i data-lucide="grid-3x3" class="w-4 h-4"></i> <span class="hidden sm:inline">Grid</span>
                 </button>
                 <div class="w-px h-5 bg-gray-300 mx-1"></div>
                 
-                <button onclick="changeZoom(-0.1)" class="w-8 h-8 flex items-center justify-center hover:bg-gray-100 rounded-lg font-bold text-gray-600">-</button>
-                <span id="zoomLabel" class="text-xs font-semibold w-12 text-center cursor-pointer hover:text-indigo-600 select-none" onclick="resetZoom()">100%</span>
-                <button onclick="changeZoom(0.1)" class="w-8 h-8 flex items-center justify-center hover:bg-gray-100 rounded-lg font-bold text-gray-600">+</button>
+                <button onclick="changeZoom(-0.1)" class="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-gray-100 rounded-lg font-bold text-gray-600">-</button>
+                <span id="zoomLabel" class="text-xs font-semibold w-10 sm:w-12 text-center cursor-pointer hover:text-indigo-600 select-none" onclick="resetZoom()">100%</span>
+                <button onclick="changeZoom(0.1)" class="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-gray-100 rounded-lg font-bold text-gray-600">+</button>
             </div>
         </div>
     </main>
 
     <!-- Sidebar KANAN (Edit Object Properties) -->
-    <aside id="rightSidebar" class="w-[280px] bg-white border-l border-gray-200 shadow-sm flex flex-col z-20 shrink-0 opacity-50 pointer-events-none transition-opacity duration-300">
-        <div class="p-4 border-b border-gray-100 shrink-0">
-            <h2 class="text-sm font-bold text-gray-900 flex items-center gap-2">
-                <i data-lucide="sliders-horizontal" class="w-4 h-4 text-indigo-600"></i> Properti Objek
-            </h2>
-            <p class="text-[11px] text-gray-500 mt-1" id="objectTypeLabel">Pilih objek di kanvas</p>
+    <aside id="rightSidebar" class="w-[280px] bg-white border-l border-gray-200 shadow-xl md:shadow-sm flex flex-col z-30 shrink-0 opacity-50 pointer-events-none transition-all duration-300 fixed md:relative inset-y-0 right-0 transform translate-x-full md:translate-x-0">
+        <div class="p-4 border-b border-gray-100 shrink-0 flex items-center justify-between">
+            <div>
+                <h2 class="text-sm font-bold text-gray-900 flex items-center gap-2">
+                    <i data-lucide="sliders-horizontal" class="w-4 h-4 text-indigo-600"></i> Properti Objek
+                </h2>
+                <p class="text-[11px] text-gray-500 mt-1" id="objectTypeLabel">Pilih objek di kanvas</p>
+            </div>
+            <button onclick="toggleRightSidebar()" class="md:hidden p-1.5 text-gray-500 hover:bg-gray-100 rounded-lg">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
         </div>
         
         <div class="flex-1 overflow-y-auto p-4 flex flex-col gap-6">
@@ -361,6 +383,41 @@
             }, 3000);
         }
 
+        // Handler Toggle Sidebar untuk Mobile
+        const leftSidebar = document.getElementById('leftSidebar');
+        const rightSidebar = document.getElementById('rightSidebar');
+        const mobileBackdrop = document.getElementById('mobileBackdrop');
+
+        function toggleLeftSidebar() {
+            const isOpen = !leftSidebar.classList.contains('-translate-x-full');
+            if (isOpen) {
+                leftSidebar.classList.add('-translate-x-full');
+                mobileBackdrop.classList.add('hidden');
+            } else {
+                leftSidebar.classList.remove('-translate-x-full');
+                rightSidebar.classList.add('translate-x-full'); // Tutup kanan jika buka kiri
+                mobileBackdrop.classList.remove('hidden');
+            }
+        }
+
+        function toggleRightSidebar() {
+            const isOpen = !rightSidebar.classList.contains('translate-x-full');
+            if (isOpen) {
+                rightSidebar.classList.add('translate-x-full');
+                mobileBackdrop.classList.add('hidden');
+            } else {
+                rightSidebar.classList.remove('translate-x-full');
+                leftSidebar.classList.add('-translate-x-full'); // Tutup kiri jika buka kanan
+                mobileBackdrop.classList.remove('hidden');
+            }
+        }
+
+        function closeMobileSidebars() {
+            leftSidebar.classList.add('-translate-x-full');
+            rightSidebar.classList.add('translate-x-full');
+            mobileBackdrop.classList.add('hidden');
+        }
+
         const canvas = new fabric.Canvas('canvas', {
             width: 800, height: 600, backgroundColor: '#ffffff',
             preserveObjectStacking: true, selectionColor: 'rgba(79, 70, 229, 0.1)', selectionBorderColor: '#4f46e5'
@@ -368,7 +425,7 @@
 
         fabric.Object.prototype.set({
             transparentCorners: false, cornerColor: '#ffffff', cornerStrokeColor: '#4f46e5',
-            borderColor: '#4f46e5', cornerSize: 10, padding: 5, cornerStyle: 'circle'
+            borderColor: '#4f46e5', cornerSize: 12, padding: 5, cornerStyle: 'circle'
         });
 
         let baseWidth = 800;
@@ -552,6 +609,7 @@
         }
 
         function updateHistoryButtons() {
+            if(!undoBtn) return;
             undoBtn.disabled = historyIndex <= 0; 
             undoBtn.classList.toggle('opacity-50', historyIndex <= 0); 
             undoBtn.classList.toggle('cursor-not-allowed', historyIndex <= 0);
@@ -565,8 +623,8 @@
         canvas.on('object:added', (e) => { if(!isHistoryAction && !e.target.excludeFromExport && !isDrawingPolyline && !isCropping) setTimeout(saveHistory, 100); });
         canvas.on('object:removed', (e) => { if(!isHistoryAction && !e.target.excludeFromExport && !isCropping) saveHistory(); });
         canvas.on('path:created', saveHistory);
-        undoBtn.addEventListener('click', undo); 
-        redoBtn.addEventListener('click', redo);
+        if(undoBtn) undoBtn.addEventListener('click', undo); 
+        if(redoBtn) redoBtn.addEventListener('click', redo);
 
 
         function groupObjects() {
@@ -645,7 +703,7 @@
                     }
 
                     if (allPaths.length === 0) {
-                        showToast('Gagal memproses penggabungan vektor (Bentuk tidak dikenali).', 'error');
+                        showToast('Gagal memproses penggabungan vektor.', 'error');
                         const sel = new fabric.ActiveSelection(objects, { canvas: canvas });
                         canvas.setActiveObject(sel);
                         canvas.requestRenderAll();
@@ -758,18 +816,20 @@
         const snapColor = '#ec4899';
         let guideLines = [];
         const snapToggleBtn = document.getElementById('snapToggleBtn');
-        snapToggleBtn.addEventListener('click', () => {
-            isSnapEnabled = !isSnapEnabled;
-            if (isSnapEnabled) {
-                snapToggleBtn.classList.add('bg-indigo-50', 'text-indigo-600');
-                snapToggleBtn.classList.remove('bg-transparent', 'text-gray-600');
-                showToast("Object Snap Aktif");
-            } else {
-                snapToggleBtn.classList.remove('bg-indigo-50', 'text-indigo-600');
-                snapToggleBtn.classList.add('bg-transparent', 'text-gray-600');
-                showToast("Object Snap Dimatikan");
-            }
-        });
+        if(snapToggleBtn) {
+            snapToggleBtn.addEventListener('click', () => {
+                isSnapEnabled = !isSnapEnabled;
+                if (isSnapEnabled) {
+                    snapToggleBtn.classList.add('bg-indigo-50', 'text-indigo-600');
+                    snapToggleBtn.classList.remove('bg-transparent', 'text-gray-600');
+                    showToast("Object Snap Aktif");
+                } else {
+                    snapToggleBtn.classList.remove('bg-indigo-50', 'text-indigo-600');
+                    snapToggleBtn.classList.add('bg-transparent', 'text-gray-600');
+                    showToast("Object Snap Dimatikan");
+                }
+            });
+        }
 
         function clearGuidelines() {
             guideLines.forEach(l => canvas.remove(l));
@@ -849,7 +909,7 @@
             disableDrawingModes(); isDrawingPolyline = true;
             canvas.defaultCursor = 'crosshair'; canvas.selection = false; canvas.skipTargetFind = true; 
             polylinePoints = []; lineArray = [];
-            polylineBtn.classList.add('bg-indigo-50', 'border-indigo-200');
+            if(polylineBtn) polylineBtn.classList.add('bg-indigo-50', 'border-indigo-200');
             showToast("Klik titik garis, tekan ENTER selesai.");
         }
 
@@ -871,7 +931,7 @@
                 });
                 canvas.add(poly); canvas.setActiveObject(poly); saveHistory();
             }
-            polylinePoints = []; lineArray = []; polylineBtn.classList.remove('bg-indigo-50', 'border-indigo-200');
+            polylinePoints = []; lineArray = []; if(polylineBtn) polylineBtn.classList.remove('bg-indigo-50', 'border-indigo-200');
         }
 
         canvas.on('mouse:down', function(opt) {
@@ -968,7 +1028,6 @@
         });
 
         // REFERENSI PANEL KANAN
-        const rightSidebar = document.getElementById('rightSidebar');
         const objectTypeLabel = document.getElementById('objectTypeLabel');
         const textTools = document.getElementById('textTools');
         const imageToolsContainer = document.getElementById('imageToolsContainer');
@@ -1107,6 +1166,7 @@
             }
             
             canvas.add(shape); canvas.setActiveObject(shape);
+            if(window.innerWidth < 768) closeMobileSidebars();
         }
 
         function addLine() {
@@ -1115,6 +1175,7 @@
             const line = new fabric.Line([50, 50, 250, 50], { left: 250, top: 300, stroke: strokeColor, strokeWidth: sWidth, strokeLineCap: 'round', selectable: true, hasControls: true, hasBorders: true, padding: 10 });
             line.setControlsVisibility({ tl: true, tr: true, bl: true, br: true, mt: false, mb: false, ml: false, mr: false });
             canvas.add(line); canvas.setActiveObject(line);
+            if(window.innerWidth < 768) closeMobileSidebars();
         }
 
         function addText(type) {
@@ -1125,6 +1186,7 @@
                 originX: 'center', originY: 'center'
             });
             canvas.add(t); canvas.setActiveObject(t);
+            if(window.innerWidth < 768) closeMobileSidebars();
         }
 
 
@@ -1138,6 +1200,7 @@
                     if (fabricImg.width > 600) fabricImg.scaleToWidth(500);
                     disableDrawingModes(); canvas.centerObject(fabricImg); canvas.add(fabricImg); canvas.setActiveObject(fabricImg);
                     showToast("Gambar diunggah");
+                    if(window.innerWidth < 768) closeMobileSidebars();
                 }
             }
             reader.readAsDataURL(file); this.value = ''; 
