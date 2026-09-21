@@ -37,6 +37,12 @@ const software = [
         desc: "Sofware untuk Melihat file 3D GLB",
         icon: "assets/glbviewer.png",
         link: "glbviewer/index.html"
+    },
+    {
+        title: "Asyik Editor",
+        desc: "Sofware untuk konten visual dengan mudah dan cepat",
+        icon: "assets/asyikeditor.png",
+        link: "asyikeditor/index.html"
     }
 ]
 window.onload = () => {
