@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MiniCanva Pro - Editor Gambar Vektor & Mobile Friendly</title>
+    <title>MiniCanva Pro - Editor Vektor, Layering, Filter & Selection Tool</title>
     
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -50,7 +50,7 @@
     <!-- Backdrop untuk menutup sidebar di mobile -->
     <div id="mobileBackdrop" onclick="closeMobileSidebars()" class="fixed inset-0 bg-black/40 z-20 hidden md:hidden transition-opacity"></div>
 
-    <!-- Sidebar KIRI (Menu Utama) -->
+    <!-- Sidebar KIRI (Menu Utama & Layer) -->
     <aside id="leftSidebar" class="w-[280px] bg-white border-r border-gray-200 shadow-lg md:shadow-sm flex flex-col z-30 shrink-0 fixed md:relative inset-y-0 left-0 transform -translate-x-full md:translate-x-0 transition-transform duration-300">
         <div class="p-5 border-b border-gray-100 flex items-center justify-between shrink-0">
             <div class="flex items-center gap-2">
@@ -70,6 +70,18 @@
         </div>
         
         <div class="flex-1 overflow-y-auto p-5 flex flex-col gap-6">
+            
+            <!-- Manajemen Layer Panel -->
+            <div>
+                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 flex items-center justify-between">
+                    <span>Manajemen Layer</span>
+                    <i data-lucide="layers" class="w-3.5 h-3.5 text-gray-400"></i>
+                </h3>
+                <div id="layersList" class="bg-gray-50 p-2 rounded-xl border border-gray-200 flex flex-col gap-1.5 max-h-44 overflow-y-auto">
+                    <span class="text-[11px] text-gray-400 text-center py-2">Belum ada layer</span>
+                </div>
+            </div>
+
             <div>
                 <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Pengaturan Kanvas</h3>
                 <div class="bg-gray-50 p-3 rounded-xl border border-gray-200 flex flex-col gap-3">
@@ -160,6 +172,9 @@
                     <i data-lucide="menu" class="w-5 h-5"></i>
                 </button>
                 
+                <button id="selectToolBtn" onclick="activateSelectTool()" class="flex items-center gap-1.5 px-2.5 py-1.5 text-xs md:text-sm bg-indigo-600 text-white border border-indigo-600 rounded-lg font-medium transition whitespace-nowrap shadow-sm" title="Object Selection Tool">
+                    <i data-lucide="mouse-pointer" class="w-4 h-4"></i> <span class="hidden sm:inline">Select</span>
+                </button>
                 <button id="fillBucketBtn" class="flex items-center gap-1.5 px-2.5 py-1.5 text-xs md:text-sm bg-gray-50 hover:bg-gray-100 text-gray-700 border border-gray-200 rounded-lg font-medium transition whitespace-nowrap" title="Paint Bucket">
                     <i data-lucide="paint-bucket" class="w-4 h-4"></i> <span class="hidden sm:inline">Fill</span>
                 </button>
@@ -322,7 +337,7 @@
 
             <hr class="border-gray-100">
 
-            <!-- Advanced Image Tools -->
+            <!-- Advanced Image Tools & Filters -->
             <div id="imageToolsContainer" class="hidden flex-col gap-2">
                 <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1 block text-purple-600">Alat Gambar & AI</label>
                 <button id="removeBgBtn" class="w-full flex items-center justify-center gap-2 px-3 py-2 text-sm bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-700 rounded-lg font-semibold transition shadow-sm">
@@ -331,6 +346,15 @@
                 <button id="cropBtn" onclick="startCrop()" class="w-full flex items-center justify-center gap-2 px-3 py-2 text-sm bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-700 rounded-lg font-semibold transition shadow-sm">
                     <i data-lucide="crop" class="w-4 h-4"></i> Potong Gambar
                 </button>
+
+                <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mt-2 mb-1 block text-indigo-600">Filter Gambar</label>
+                <div class="grid grid-cols-2 gap-1.5">
+                    <button onclick="applyImageFilter('normal')" class="py-1.5 text-[11px] bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded font-medium text-gray-700 transition">Normal</button>
+                    <button onclick="applyImageFilter('grayscale')" class="py-1.5 text-[11px] bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded font-medium text-gray-700 transition">Grayscale</button>
+                    <button onclick="applyImageFilter('sepia')" class="py-1.5 text-[11px] bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded font-medium text-gray-700 transition">Sepia</button>
+                    <button onclick="applyImageFilter('blur')" class="py-1.5 text-[11px] bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded font-medium text-gray-700 transition">Blur</button>
+                    <button onclick="applyImageFilter('invert')" class="py-1.5 text-[11px] col-span-2 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded font-medium text-gray-700 transition">Invert</button>
+                </div>
                 <hr class="border-gray-100 my-2">
             </div>
 
@@ -395,7 +419,7 @@
                 mobileBackdrop.classList.add('hidden');
             } else {
                 leftSidebar.classList.remove('-translate-x-full');
-                rightSidebar.classList.add('translate-x-full'); // Tutup kanan jika buka kiri
+                rightSidebar.classList.add('translate-x-full');
                 mobileBackdrop.classList.remove('hidden');
             }
         }
@@ -407,7 +431,7 @@
                 mobileBackdrop.classList.add('hidden');
             } else {
                 rightSidebar.classList.remove('translate-x-full');
-                leftSidebar.classList.add('-translate-x-full'); // Tutup kiri jika buka kanan
+                leftSidebar.classList.add('-translate-x-full');
                 mobileBackdrop.classList.remove('hidden');
             }
         }
@@ -557,6 +581,7 @@
                     if (canvas.backgroundColor) {
                         canvasBgColorInput.value = typeof canvas.backgroundColor === 'string' ? canvas.backgroundColor : '#ffffff';
                     }
+                    updateLayersPanel();
                 });
             } catch (e) {
                 console.error("Gagal memuat state", e);
@@ -605,6 +630,7 @@
                 localStorage.setItem('minicanva_full_state', stateStr);
                 if(canvas.backgroundColor) canvasBgColorInput.value = typeof canvas.backgroundColor === 'string' ? canvas.backgroundColor : '#ffffff';
                 if(isGridVisible) drawGrid(); 
+                updateLayersPanel();
             });
         }
 
@@ -619,13 +645,153 @@
             redoBtn.classList.toggle('cursor-not-allowed', historyIndex >= history.length - 1);
         }
 
-        canvas.on('object:modified', saveHistory); 
-        canvas.on('object:added', (e) => { if(!isHistoryAction && !e.target.excludeFromExport && !isDrawingPolyline && !isCropping) setTimeout(saveHistory, 100); });
-        canvas.on('object:removed', (e) => { if(!isHistoryAction && !e.target.excludeFromExport && !isCropping) saveHistory(); });
-        canvas.on('path:created', saveHistory);
+        canvas.on('object:modified', () => { saveHistory(); updateLayersPanel(); }); 
+        canvas.on('object:added', (e) => { 
+            if(!isHistoryAction && !e.target.excludeFromExport && !isDrawingPolyline && !isCropping) setTimeout(saveHistory, 100); 
+            updateLayersPanel();
+        });
+        canvas.on('object:removed', (e) => { 
+            if(!isHistoryAction && !e.target.excludeFromExport && !isCropping) saveHistory(); 
+            updateLayersPanel();
+        });
+        canvas.on('path:created', () => { saveHistory(); updateLayersPanel(); });
+        canvas.on('selection:created', () => { updateToolbar(); updateLayersPanel(); });
+        canvas.on('selection:updated', () => { updateToolbar(); updateLayersPanel(); });
+        canvas.on('selection:cleared', () => { 
+            if (!canvas.isDrawingMode && !isDrawingPolyline && !isFillBucketMode && !isCropping) {
+                rightSidebar.classList.add('opacity-50', 'pointer-events-none'); 
+                objectTypeLabel.innerText = "Pilih objek di kanvas";
+            }
+            updateLayersPanel();
+        });
+
         if(undoBtn) undoBtn.addEventListener('click', undo); 
         if(redoBtn) redoBtn.addEventListener('click', redo);
 
+        // ----------------- MANAJEMEN LAYER PANEL -----------------
+        function updateLayersPanel() {
+            const layersList = document.getElementById('layersList');
+            if (!layersList) return;
+            layersList.innerHTML = '';
+            
+            const objects = canvas.getObjects().filter(o => !o.excludeFromExport);
+            if (objects.length === 0) {
+                layersList.innerHTML = '<span class="text-[11px] text-gray-400 text-center py-2">Belum ada layer</span>';
+                return;
+            }
+
+            const reversedObjects = [...objects].reverse();
+
+            reversedObjects.forEach((obj, index) => {
+                const actualIndex = objects.length - 1 - index;
+                const isSelected = canvas.getActiveObject() === obj;
+                
+                let iconName = 'square';
+                let labelName = 'Objek';
+                if (obj.type.includes('text')) { 
+                    iconName = 'type'; 
+                    labelName = obj.text ? obj.text.substring(0, 12) + (obj.text.length > 12 ? '...' : '') : 'Teks'; 
+                }
+                else if (obj.type === 'image') { iconName = 'image'; labelName = 'Gambar'; }
+                else if (obj.type === 'rect') { iconName = 'square'; labelName = 'Persegi'; }
+                else if (obj.type === 'circle') { iconName = 'circle'; labelName = 'Lingkaran'; }
+                else if (obj.type === 'triangle') { iconName = 'triangle'; labelName = 'Segitiga'; }
+                else if (obj.type === 'line' || obj.type === 'polyline') { iconName = 'minus'; labelName = 'Garis'; }
+                else if (obj.type === 'group') { iconName = 'group'; labelName = 'Grup'; }
+
+                const item = document.createElement('div');
+                item.className = `flex items-center justify-between p-2 rounded-lg text-xs cursor-pointer transition ${isSelected ? 'bg-indigo-50 border border-indigo-200 text-indigo-700 font-medium' : 'bg-white hover:bg-gray-100 border border-gray-100 text-gray-700'}`;
+                
+                item.innerHTML = `
+                    <div class="flex items-center gap-2 truncate flex-1" onclick="selectLayer(${actualIndex})">
+                        <i data-lucide="${iconName}" class="w-3.5 h-3.5 shrink-0"></i>
+                        <span class="truncate">${labelName}</span>
+                    </div>
+                    <div class="flex items-center gap-0.5 shrink-0">
+                        <button onclick="event.stopPropagation(); moveLayerUp(${actualIndex})" class="p-1 hover:bg-gray-200 rounded text-gray-500" title="Naikkan Layer"><i data-lucide="chevron-up" class="w-3 h-3"></i></button>
+                        <button onclick="event.stopPropagation(); moveLayerDown(${actualIndex})" class="p-1 hover:bg-gray-200 rounded text-gray-500" title="Turunkan Layer"><i data-lucide="chevron-down" class="w-3 h-3"></i></button>
+                    </div>
+                `;
+                layersList.appendChild(item);
+            });
+            lucide.createIcons({ root: layersList });
+        }
+
+        function selectLayer(index) {
+            const objects = canvas.getObjects().filter(o => !o.excludeFromExport);
+            const obj = objects[index];
+            if (obj) {
+                canvas.setActiveObject(obj);
+                canvas.renderAll();
+                updateLayersPanel();
+            }
+        }
+
+        function moveLayerUp(index) {
+            const objects = canvas.getObjects().filter(o => !o.excludeFromExport);
+            const obj = objects[index];
+            if (obj && index < objects.length - 1) {
+                canvas.bringForward(obj);
+                canvas.renderAll();
+                saveHistory();
+                updateLayersPanel();
+            }
+        }
+
+        function moveLayerDown(index) {
+            const objects = canvas.getObjects().filter(o => !o.excludeFromExport);
+            const obj = objects[index];
+            if (obj && index > 0) {
+                canvas.sendBackwards(obj);
+                canvas.renderAll();
+                saveHistory();
+                updateLayersPanel();
+            }
+        }
+
+        // ----------------- FITUR SELECTION TOOL -----------------
+        const selectToolBtn = document.getElementById('selectToolBtn');
+
+        function activateSelectTool() {
+            disableDrawingModes();
+            canvas.selection = true;
+            canvas.skipTargetFind = false;
+            canvas.defaultCursor = 'default';
+
+            selectToolBtn.classList.replace('bg-gray-50', 'bg-indigo-600');
+            selectToolBtn.classList.replace('hover:bg-gray-100', 'hover:bg-indigo-700');
+            selectToolBtn.classList.replace('text-gray-700', 'text-white');
+            selectToolBtn.classList.replace('border-gray-200', 'border-indigo-600');
+            selectToolBtn.classList.add('shadow-sm');
+
+            showToast("Object Selection Tool aktif");
+        }
+
+        // ----------------- FITUR FILTER GAMBAR -----------------
+        function applyImageFilter(filterType) {
+            const activeObj = canvas.getActiveObject();
+            if (!activeObj || activeObj.type !== 'image') {
+                showToast('Pilih objek gambar terlebih dahulu!', 'error');
+                return;
+            }
+
+            activeObj.filters = [];
+
+            if (filterType === 'grayscale') {
+                activeObj.filters.push(new fabric.Image.filters.Grayscale());
+            } else if (filterType === 'sepia') {
+                activeObj.filters.push(new fabric.Image.filters.Sepia());
+            } else if (filterType === 'blur') {
+                activeObj.filters.push(new fabric.Image.filters.Blur({ blur: 0.3 }));
+            } else if (filterType === 'invert') {
+                activeObj.filters.push(new fabric.Image.filters.Invert());
+            }
+
+            activeObj.applyFilters();
+            canvas.renderAll();
+            saveHistory();
+            showToast(`Filter ${filterType} diterapkan!`);
+        }
 
         function groupObjects() {
             if (!canvas.getActiveObject() || canvas.getActiveObject().type !== 'activeSelection') {
@@ -635,6 +801,7 @@
             const group = canvas.getActiveObject().toGroup();
             canvas.renderAll();
             saveHistory();
+            updateLayersPanel();
             showToast('Objek berhasil di-Group');
         }
 
@@ -647,6 +814,7 @@
             obj.toActiveSelection();
             canvas.renderAll();
             saveHistory();
+            updateLayersPanel();
             showToast('Objek berhasil di-Ungroup');
         }
 
@@ -737,6 +905,7 @@
                         canvas.setActiveObject(unionShape);
                         canvas.renderAll();
                         saveHistory();
+                        updateLayersPanel();
                         showToast('Union objek berhasil!');
                     });
                 } catch (err) {
@@ -781,6 +950,7 @@
                 } else { canvas.add(clonedObj); }
                 _clipboard.top += 20; _clipboard.left += 20;
                 canvas.setActiveObject(clonedObj); canvas.requestRenderAll(); saveHistory();
+                updateLayersPanel();
                 showToast("Objek ditempel");
             });
         }
@@ -797,6 +967,7 @@
                     cloned.setCoords();
                 } else { canvas.add(cloned); }
                 canvas.setActiveObject(cloned); canvas.requestRenderAll(); saveHistory();
+                updateLayersPanel();
                 showToast("Objek diduplikasi");
             });
         }
@@ -807,7 +978,9 @@
             if (activeObjects.length) {
                 canvas.discardActiveObject();
                 activeObjects.forEach(function(object) { canvas.remove(object); });
-                saveHistory(); showToast("Objek dihapus");
+                saveHistory(); 
+                updateLayersPanel();
+                showToast("Objek dihapus");
             }
         }
 
@@ -929,7 +1102,7 @@
                     strokeWidth: parseInt(document.getElementById('strokeWidth').value) || 4,
                     fill: 'transparent', selectable: true, hasControls: true, strokeLineCap: 'round', strokeLineJoin: 'round'
                 });
-                canvas.add(poly); canvas.setActiveObject(poly); saveHistory();
+                canvas.add(poly); canvas.setActiveObject(poly); saveHistory(); updateLayersPanel();
             }
             polylinePoints = []; lineArray = []; if(polylineBtn) polylineBtn.classList.remove('bg-indigo-50', 'border-indigo-200');
         }
@@ -1050,15 +1223,6 @@
         const btnAlignRight = document.getElementById('btnAlignRight');
         const fontFamilySelect = document.getElementById('fontFamily');
 
-        canvas.on('selection:created', updateToolbar);
-        canvas.on('selection:updated', updateToolbar);
-        canvas.on('selection:cleared', () => { 
-            if (!canvas.isDrawingMode && !isDrawingPolyline && !isFillBucketMode && !isCropping) {
-                rightSidebar.classList.add('opacity-50', 'pointer-events-none'); 
-                objectTypeLabel.innerText = "Pilih objek di kanvas";
-            }
-        });
-
         function updateToolbar() {
             if(canvas.isDrawingMode) disableDrawingModes();
             if(isCropping) return; 
@@ -1165,7 +1329,7 @@
                 shape = new fabric.Polygon(points, { left: 350, top: 250, fill: fill, stroke: stroke, strokeWidth: sWidth });
             }
             
-            canvas.add(shape); canvas.setActiveObject(shape);
+            canvas.add(shape); canvas.setActiveObject(shape); updateLayersPanel();
             if(window.innerWidth < 768) closeMobileSidebars();
         }
 
@@ -1174,7 +1338,7 @@
             const strokeColor = strokeInput.value || '#4f46e5', sWidth = parseInt(strokeWInput.value) || 4;
             const line = new fabric.Line([50, 50, 250, 50], { left: 250, top: 300, stroke: strokeColor, strokeWidth: sWidth, strokeLineCap: 'round', selectable: true, hasControls: true, hasBorders: true, padding: 10 });
             line.setControlsVisibility({ tl: true, tr: true, bl: true, br: true, mt: false, mb: false, ml: false, mr: false });
-            canvas.add(line); canvas.setActiveObject(line);
+            canvas.add(line); canvas.setActiveObject(line); updateLayersPanel();
             if(window.innerWidth < 768) closeMobileSidebars();
         }
 
@@ -1185,7 +1349,7 @@
                 fill: fillInput.value, fontSize: type === 'heading' ? 48 : 24, fontWeight: type === 'heading' ? 'bold' : 'normal', textAlign: 'center',
                 originX: 'center', originY: 'center'
             });
-            canvas.add(t); canvas.setActiveObject(t);
+            canvas.add(t); canvas.setActiveObject(t); updateLayersPanel();
             if(window.innerWidth < 768) closeMobileSidebars();
         }
 
@@ -1199,6 +1363,7 @@
                     const fabricImg = new fabric.Image(imgObj);
                     if (fabricImg.width > 600) fabricImg.scaleToWidth(500);
                     disableDrawingModes(); canvas.centerObject(fabricImg); canvas.add(fabricImg); canvas.setActiveObject(fabricImg);
+                    updateLayersPanel();
                     showToast("Gambar diunggah");
                     if(window.innerWidth < 768) closeMobileSidebars();
                 }
@@ -1225,6 +1390,11 @@
                 fillBucketBtn.classList.replace('bg-gray-50', 'bg-indigo-600');
                 fillBucketBtn.classList.replace('hover:bg-gray-100', 'hover:bg-indigo-700');
                 fillBucketBtn.classList.replace('text-gray-700', 'text-white');
+                
+                selectToolBtn.classList.replace('bg-indigo-600', 'bg-gray-50');
+                selectToolBtn.classList.replace('text-white', 'text-gray-700');
+                selectToolBtn.classList.replace('border-indigo-600', 'border-gray-200');
+
                 showToast("Paint Bucket aktif. Klik area kanvas untuk mewarnai.");
             }
         });
@@ -1240,6 +1410,10 @@
                 eraserBtn.classList.replace('bg-red-50', 'bg-red-50'); eraserBtn.classList.replace('text-white', 'text-red-700');
                 fillBucketBtn.classList.replace('bg-indigo-600', 'bg-gray-50'); fillBucketBtn.classList.replace('hover:bg-indigo-700', 'hover:bg-gray-100'); fillBucketBtn.classList.replace('text-white', 'text-gray-700');
                 
+                selectToolBtn.classList.replace('bg-indigo-600', 'bg-gray-50');
+                selectToolBtn.classList.replace('text-white', 'text-gray-700');
+                selectToolBtn.classList.replace('border-indigo-600', 'border-gray-200');
+
                 showToast("Draw mode aktif");
             }
         });
@@ -1255,6 +1429,10 @@
                 drawBtn.classList.replace('bg-blue-600', 'bg-blue-50'); drawBtn.classList.replace('text-white', 'text-blue-700');
                 fillBucketBtn.classList.replace('bg-indigo-600', 'bg-gray-50'); fillBucketBtn.classList.replace('hover:bg-indigo-700', 'hover:bg-gray-100'); fillBucketBtn.classList.replace('text-white', 'text-gray-700');
                 
+                selectToolBtn.classList.replace('bg-indigo-600', 'bg-gray-50');
+                selectToolBtn.classList.replace('text-white', 'text-gray-700');
+                selectToolBtn.classList.replace('border-indigo-600', 'border-gray-200');
+
                 showToast("Penghapus aktif");
             }
         });
@@ -1278,6 +1456,11 @@
             fillBucketBtn.classList.replace('bg-indigo-600', 'bg-gray-50'); 
             fillBucketBtn.classList.replace('hover:bg-indigo-700', 'hover:bg-gray-100'); 
             fillBucketBtn.classList.replace('text-white', 'text-gray-700');
+
+            selectToolBtn.classList.replace('bg-gray-50', 'bg-indigo-600');
+            selectToolBtn.classList.replace('hover:bg-gray-100', 'hover:bg-indigo-700');
+            selectToolBtn.classList.replace('text-gray-700', 'text-white');
+            selectToolBtn.classList.replace('border-gray-200', 'border-indigo-600');
             
             if(!canvas.getActiveObject()) {
                 rightSidebar.classList.add('opacity-50', 'pointer-events-none');
@@ -1286,8 +1469,22 @@
         }
 
 
-        function bringForward() { const obj = canvas.getActiveObject(); if(obj && !isCropping) { canvas.bringForward(obj); saveHistory(); } }
-        function sendBackward() { const obj = canvas.getActiveObject(); if(obj && !isCropping) { canvas.sendBackwards(obj); saveHistory(); } }
+        function bringForward() { 
+            const obj = canvas.getActiveObject(); 
+            if(obj && !isCropping) { 
+                canvas.bringForward(obj); 
+                saveHistory(); 
+                updateLayersPanel();
+            } 
+        }
+        function sendBackward() { 
+            const obj = canvas.getActiveObject(); 
+            if(obj && !isCropping) { 
+                canvas.sendBackwards(obj); 
+                saveHistory(); 
+                updateLayersPanel();
+            } 
+        }
 
         window.addEventListener('keydown', (e) => {
             if (e.target.tagName.toLowerCase() === 'input' || (canvas.getActiveObject() && canvas.getActiveObject().isEditing)) return;
@@ -1367,28 +1564,32 @@
         function applyCrop() {
             if (!isCropping || !cropRect || !cropImageObj) return;
 
-            const cRect = cropRect.getBoundingRect();
-            const iRect = cropImageObj.getBoundingRect();
+            const imgLeft = cropImageObj.left;
+            const imgTop = cropImageObj.top;
+            const scaleX = cropImageObj.scaleX;
+            const scaleY = cropImageObj.scaleY;
 
-            const left = Math.max(cRect.left, iRect.left);
-            const top = Math.max(cRect.top, iRect.top);
-            const right = Math.min(cRect.left + cRect.width, iRect.left + iRect.width);
-            const bottom = Math.min(cRect.top + cRect.height, iRect.top + iRect.height);
+            const rectLeft = cropRect.left;
+            const rectTop = cropRect.top;
+            const rectWidth = cropRect.width * cropRect.scaleX;
+            const rectHeight = cropRect.height * cropRect.scaleY;
 
-            const cropWidth = right - left;
-            const cropHeight = bottom - top;
+            const left = Math.max(rectLeft, imgLeft);
+            const top = Math.max(rectTop, imgTop);
+            const right = Math.min(rectLeft + rectWidth, imgLeft + (cropImageObj.width * scaleX));
+            const bottom = Math.min(rectTop + rectHeight, imgTop + (cropImageObj.height * scaleY));
 
-            if (cropWidth > 0 && cropHeight > 0) {
-                const scaleX = cropImageObj.scaleX;
-                const scaleY = cropImageObj.scaleY;
+            const cropW = right - left;
+            const cropH = bottom - top;
 
+            if (cropW > 0 && cropH > 0) {
                 const currentCropX = cropImageObj.cropX || 0;
                 const currentCropY = cropImageObj.cropY || 0;
 
-                const newCropX = (left - cropImageObj.left) / scaleX + currentCropX;
-                const newCropY = (top - cropImageObj.top) / scaleY + currentCropY;
-                const newWidth = cropWidth / scaleX;
-                const newHeight = cropHeight / scaleY;
+                const newCropX = currentCropX + (left - imgLeft) / scaleX;
+                const newCropY = currentCropY + (top - imgTop) / scaleY;
+                const newWidth = cropW / scaleX;
+                const newHeight = cropH / scaleY;
 
                 cropImageObj.set({
                     cropX: newCropX,
@@ -1398,6 +1599,7 @@
                     left: left,
                     top: top
                 });
+                cropImageObj.setCoords();
             }
 
             endCrop();
@@ -1471,6 +1673,7 @@
                         canvas.remove(activeObj); 
                         canvas.add(img); 
                         canvas.setActiveObject(img); 
+                        updateLayersPanel();
                         showToast("Background berhasil dihapus oleh server lokal!");
                         saveHistory();
                     });
@@ -1550,6 +1753,7 @@
                         if (canvas.backgroundColor) {
                             canvasBgColorInput.value = typeof canvas.backgroundColor === 'string' ? canvas.backgroundColor : '#ffffff';
                         }
+                        updateLayersPanel();
                         showToast("Proyek .ask berhasil dimuat!");
                     });
                 } catch (err) {
@@ -1658,6 +1862,7 @@
                     canvas.add(img);
                     canvas.setActiveObject(img);
                     saveHistory();
+                    updateLayersPanel();
                     showToast("Area berhasil diwarnai!");
                 });
             }
