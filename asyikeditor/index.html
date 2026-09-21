@@ -57,7 +57,7 @@
                 <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white shadow-sm">
                     <i data-lucide="pen-tool" class="w-5 h-5"></i>
                 </div>
-                <h1 class="text-xl font-bold text-gray-900 tracking-tight">MiniCanva</h1>
+                <h1 class="text-xl font-bold text-gray-900 tracking-tight">Asyik Editor</h1>
             </div>
             <div class="flex items-center gap-1">
                 <button onclick="clearCanvasStorage()" class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition" title="Reset Kanvas & Storage">
@@ -287,6 +287,37 @@
         
         <div class="flex-1 overflow-y-auto p-4 flex flex-col gap-6">
             
+            <!-- Posisi & Ukuran (Transform X, Y, Width, Height, Rotate) -->
+            <div id="transformTools">
+                <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2.5 block">Posisi & Ukuran</label>
+                <div class="grid grid-cols-2 gap-2 mb-2">
+                    <div class="flex items-center gap-1.5 bg-gray-50 p-2 rounded-lg border border-gray-200 focus-within:border-indigo-500 transition">
+                        <span class="text-xs font-bold text-gray-400 w-4">X</span>
+                        <input type="number" id="objX" class="w-full bg-transparent text-xs font-semibold text-gray-700 outline-none" placeholder="0">
+                    </div>
+                    <div class="flex items-center gap-1.5 bg-gray-50 p-2 rounded-lg border border-gray-200 focus-within:border-indigo-500 transition">
+                        <span class="text-xs font-bold text-gray-400 w-4">Y</span>
+                        <input type="number" id="objY" class="w-full bg-transparent text-xs font-semibold text-gray-700 outline-none" placeholder="0">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-2 mb-2">
+                    <div class="flex items-center gap-1.5 bg-gray-50 p-2 rounded-lg border border-gray-200 focus-within:border-indigo-500 transition">
+                        <span class="text-xs font-bold text-gray-400 w-4">W</span>
+                        <input type="number" id="objWidth" min="1" class="w-full bg-transparent text-xs font-semibold text-gray-700 outline-none" placeholder="0">
+                    </div>
+                    <div class="flex items-center gap-1.5 bg-gray-50 p-2 rounded-lg border border-gray-200 focus-within:border-indigo-500 transition">
+                        <span class="text-xs font-bold text-gray-400 w-4">H</span>
+                        <input type="number" id="objHeight" min="1" class="w-full bg-transparent text-xs font-semibold text-gray-700 outline-none" placeholder="0">
+                    </div>
+                </div>
+                <div class="flex items-center gap-1.5 bg-gray-50 p-2 rounded-lg border border-gray-200 focus-within:border-indigo-500 transition">
+                    <span class="text-xs font-bold text-gray-400 w-4">R°</span>
+                    <input type="number" id="objRotate" class="w-full bg-transparent text-xs font-semibold text-gray-700 outline-none" placeholder="0">
+                </div>
+            </div>
+
+            <hr class="border-gray-100">
+
             <!-- Text Formatting Tools -->
             <div id="textTools" class="flex-col gap-3 hidden">
                 <div>
@@ -1497,6 +1528,12 @@
         const textTools = document.getElementById('textTools');
         const imageToolsContainer = document.getElementById('imageToolsContainer');
         
+        const objXInput = document.getElementById('objX');
+        const objYInput = document.getElementById('objY');
+        const objWidthInput = document.getElementById('objWidth');
+        const objHeightInput = document.getElementById('objHeight');
+        const objRotateInput = document.getElementById('objRotate');
+
         const fillInput = document.getElementById('fillColor');
         const strokeInput = document.getElementById('strokeColor');
         const strokeWInput = document.getElementById('strokeWidth');
@@ -1522,6 +1559,13 @@
             rightSidebar.classList.remove('opacity-50', 'pointer-events-none');
             const obj = canvas.getActiveObject();
             if (!obj) return;
+
+            // Update Input Transform (X, Y, W, H, Rotate)
+            objXInput.value = Math.round(obj.left || 0);
+            objYInput.value = Math.round(obj.top || 0);
+            objWidthInput.value = Math.round(obj.getScaledWidth() || 0);
+            objHeightInput.value = Math.round(obj.getScaledHeight() || 0);
+            objRotateInput.value = Math.round(obj.angle || 0);
 
             if (obj.type === 'activeSelection') objectTypeLabel.innerText = "Beberapa Objek Dipilih";
             else if (obj.type.includes('text')) objectTypeLabel.innerText = "Teks Tipografi";
@@ -1578,6 +1622,84 @@
             lockBtn.classList.toggle('bg-amber-50', !!obj.lockMovementX);
             lockBtn.classList.toggle('border-amber-200', !!obj.lockMovementX);
         }
+
+        // Real-time Event Listener saat objek diubah langsung di kanvas
+        canvas.on('object:moving', (e) => {
+            if (e.target && !isCropping) {
+                objXInput.value = Math.round(e.target.left || 0);
+                objYInput.value = Math.round(e.target.top || 0);
+            }
+        });
+        canvas.on('object:scaling', (e) => {
+            if (e.target && !isCropping) {
+                objXInput.value = Math.round(e.target.left || 0);
+                objYInput.value = Math.round(e.target.top || 0);
+                objWidthInput.value = Math.round(e.target.getScaledWidth() || 0);
+                objHeightInput.value = Math.round(e.target.getScaledHeight() || 0);
+            }
+        });
+        canvas.on('object:rotating', (e) => {
+            if (e.target && !isCropping) {
+                objRotateInput.value = Math.round(e.target.angle || 0);
+            }
+        });
+
+        // Event Handler Input Manual untuk Posisi & Ukuran
+        objXInput.addEventListener('input', (e) => {
+            const obj = canvas.getActiveObject();
+            if (obj && !isCropping) {
+                obj.set('left', parseFloat(e.target.value) || 0);
+                obj.setCoords();
+                canvas.renderAll();
+            }
+        });
+        objXInput.addEventListener('change', () => { if(canvas.getActiveObject()) saveHistory(); });
+
+        objYInput.addEventListener('input', (e) => {
+            const obj = canvas.getActiveObject();
+            if (obj && !isCropping) {
+                obj.set('top', parseFloat(e.target.value) || 0);
+                obj.setCoords();
+                canvas.renderAll();
+            }
+        });
+        objYInput.addEventListener('change', () => { if(canvas.getActiveObject()) saveHistory(); });
+
+        objWidthInput.addEventListener('input', (e) => {
+            const obj = canvas.getActiveObject();
+            if (obj && !isCropping) {
+                const val = parseFloat(e.target.value);
+                if (val > 0) {
+                    obj.scaleToWidth(val);
+                    obj.setCoords();
+                    canvas.renderAll();
+                }
+            }
+        });
+        objWidthInput.addEventListener('change', () => { if(canvas.getActiveObject()) saveHistory(); });
+
+        objHeightInput.addEventListener('input', (e) => {
+            const obj = canvas.getActiveObject();
+            if (obj && !isCropping) {
+                const val = parseFloat(e.target.value);
+                if (val > 0) {
+                    obj.scaleToHeight(val);
+                    obj.setCoords();
+                    canvas.renderAll();
+                }
+            }
+        });
+        objHeightInput.addEventListener('change', () => { if(canvas.getActiveObject()) saveHistory(); });
+
+        objRotateInput.addEventListener('input', (e) => {
+            const obj = canvas.getActiveObject();
+            if (obj && !isCropping) {
+                obj.set('angle', parseFloat(e.target.value) || 0);
+                obj.setCoords();
+                canvas.renderAll();
+            }
+        });
+        objRotateInput.addEventListener('change', () => { if(canvas.getActiveObject()) saveHistory(); });
 
         opacitySlider.addEventListener('input', (e) => {
             const obj = canvas.getActiveObject();
