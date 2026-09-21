@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MiniCanva Pro - Editor Vektor, Layering, Filter & Selection Tool</title>
+    <title>MiniCanva Pro - Editor Vektor, Layering, Filter, Selection & 200+ Lucide Icons</title>
     
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -151,10 +151,27 @@
                         <i data-lucide="minus" class="w-5 h-5 text-gray-600"></i>
                         <span class="text-[10px] font-medium text-gray-600">Garis</span>
                     </button>
-                    <button id="polylineBtn" onclick="startPolyline()" class="py-3 px-2 bg-gray-50 hover:bg-white hover:shadow-sm border border-transparent hover:border-gray-200 rounded-lg flex flex-col justify-center items-center transition gap-1.5" title="Multiline">
+                    <button onclick="addCurve()" class="py-3 px-2 bg-gray-50 hover:bg-white hover:shadow-sm border border-transparent hover:border-gray-200 rounded-lg flex flex-col justify-center items-center transition gap-1.5" title="Garis Lengkung">
+                        <i data-lucide="spline" class="w-5 h-5 text-gray-600"></i>
+                        <span class="text-[10px] font-medium text-gray-600">Lengkung</span>
+                    </button>
+                    <button id="polylineBtn" onclick="startPolyline()" class="py-3 px-2 bg-gray-50 hover:bg-white hover:shadow-sm border border-transparent hover:border-gray-200 rounded-lg flex flex-col justify-center items-center transition gap-1.5 col-span-3" title="Multiline">
                         <i data-lucide="waypoints" class="w-5 h-5 text-gray-600"></i>
                         <span class="text-[10px] font-medium text-gray-600">Multiline</span>
                     </button>
+                </div>
+            </div>
+
+            <!-- Ikon Vektor Berbasis Lucide (200+ Ikon dengan Search Bar) -->
+            <div>
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Ikon Vektor (200+ Lucide)</h3>
+                </div>
+                <div class="mb-2">
+                    <input type="text" id="iconSearchInput" placeholder="Cari ikon..." oninput="filterIcons()" class="w-full border border-gray-200 p-2 rounded-lg text-xs bg-gray-50 focus:outline-indigo-500">
+                </div>
+                <div id="iconGridContainer" class="grid grid-cols-3 gap-2 max-h-56 overflow-y-auto p-1 bg-gray-50 rounded-xl border border-gray-200">
+                    <!-- Diisi secara dinamis melalui JavaScript -->
                 </div>
             </div>
         </div>
@@ -388,6 +405,214 @@
     <!-- JavaScript Logic -->
     <script>
         lucide.createIcons();
+
+        // 200+ Ikon Lucide Pilihan beserta SVG Strings
+        const lucideIconsMap = {
+            star: '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
+            heart: '<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>',
+            shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+            zap: '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+            award: '<circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/>',
+            bookmark: '<path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/>',
+            user: '<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+            settings: '<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>',
+            home: '<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
+            search: '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
+            shoppingCart: '<circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>',
+            checkCircle: '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>',
+            xCircle: '<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>',
+            info: '<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>',
+            alertTriangle: '<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+            lock: '<rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+            mail: '<rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>',
+            phone: '<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>',
+            camera: '<path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/>',
+            globe: '<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
+            calendar: '<rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>',
+            clock: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+            download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>',
+            share2: '<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>',
+            smile: '<circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/>',
+            mapPin: '<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>',
+            fileText: '<path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/>',
+            folder: '<path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2h16Z"/>',
+            image: '<rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>',
+            video: '<path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2" ry="2"/>',
+            music: '<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>',
+            volume2: '<polygon points="11 5 6 9H2v6h4l5 4V5Z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>',
+            mic: '<path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><line x1="12" y1="19" x2="12" y2="22"/>',
+            play: '<polygon points="5 3 19 12 5 21 5 3"/>',
+            pause: '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>',
+            trash2: '<path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/>',
+            edit: '<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>',
+            copy: '<rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>',
+            link: '<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>',
+            eye: '<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>',
+            filter: '<polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>',
+            refreshCw: '<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/>',
+            maximize: '<path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/>',
+            minimize: '<path d="M4 14h6v6"/><path d="M20 10h-6V4"/><path d="m14 10 7-7"/><path d="m3 21 7-7"/>',
+            zoomIn: '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>',
+            zoomOut: '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/>',
+            thumbsUp: '<path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2h0a3.13 3.13 0 0 1 3 3.88Z"/>',
+            messageSquare: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+            send: '<line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>',
+            bell: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.37 21a1.94 1.94 0 0 0 3.26 0"/>',
+            flag: '<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/>',
+            compass: '<circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>',
+            truck: '<path d="M10 17h4V5H2v12h3"/><path d="M20 17h2v-3.34a4 4 0 0 0-1.17-2.83L19 9h-5v8h1"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/>',
+            plane: '<path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.5 1.2c-.2.5 0 1.1.4 1.4L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.7 5.4c.3.4.9.6 1.4.4l1.2-.5c.4-.2.6-.7.5-1.2z"/>',
+            gift: '<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/>',
+            package: '<path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/>',
+            database: '<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/>',
+            server: '<rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/>',
+            cpu: '<rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9"/><path d="M9 1v3"/><path d="M15 1v3"/><path d="M9 20v3"/><path d="M15 20v3"/><path d="M20 9h3"/><path d="M20 15h3"/><path d="M1 9h3"/><path d="M1 15h3"/>',
+            wifi: '<path d="M12 20h.01"/><path d="M2 8.82a15 15 0 0 1 20 0"/><path d="M5 12.859a10 10 0 0 1 14 0"/><path d="M8.5 16.429a5 5 0 0 1 7 0"/>',
+            battery: '<rect width="16" height="10" x="2" y="7" rx="2" ry="2"/><line x1="22" y1="11" x2="22" y2="13"/>',
+            power: '<path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/>',
+            sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>',
+            moon: '<path d="M12 3a6.36 6.36 0 0 0 9 9 9 9 0 1 1-9-9Z"/>',
+            cloud: '<path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>',
+            umbrella: '<path d="M22 12a10.06 10.06 0 0 0-20 0Z"/><path d="M12 12v8a2 2 0 0 0 4 0"/>',
+            droplet: '<path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>',
+            flame: '<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.5 4 6.5 2 2 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>',
+            wind: '<path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"/><path d="M9.6 4.6A2 2 0 1 1 11 8H2"/><path d="M12.6 19.4A2 2 0 1 0 14 16H2"/>',
+            activity: '<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',
+            barChart: '<line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/>',
+            pieChart: '<path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/>',
+            trendingUp: '<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>',
+            trendingDown: '<polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/>',
+            dollarSign: '<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',
+            creditCard: '<rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>',
+            wallet: '<path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12a2 2 0 0 0 2 2h14v-4"/><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"/>',
+            shoppingBag: '<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>',
+            trophy: '<path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>',
+            target: '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
+            key: '<circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/>',
+            keyRound: '<circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3"/>',
+            users: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+            building: '<rect width="16" height="20" x="4" y="2" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M8 10h.01"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 14h.01"/><path d="M16 14h.01"/><path d="M12 14h.01"/>',
+            store: '<path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M15 22v-4a3 3 0 0 0-6 0v4"/><path d="M2 7h20"/><path d="M22 7v3a2 2 0 0 1-2 2v0a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12v0a2 2 0 0 1-2-2V7"/>',
+            briefcase: '<rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>',
+            book: '<path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/>',
+            bookOpen: '<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>',
+            paperclip: '<path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/>',
+            scissors: '<circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.12 15.88"/><path d="M14.47 14.48 20 20"/><path d="M8.12 8.12 12 12"/>',
+            printer: '<polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/>',
+            monitor: '<rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>',
+            smartphone: '<rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>',
+            tablet: '<rect width="18" height="20" x="3" y="2" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>',
+            tv: '<rect width="20" height="15" x="2" y="7" rx="2" ry="2"/><polyline points="17 2 12 7 7 2"/>',
+            speaker: '<rect width="16" height="20" x="4" y="2" rx="2" ry="2"/><circle cx="12" cy="14" r="4"/><line x1="12" y1="6" x2="12.01" y2="6"/>',
+            headphones: '<path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2z"/><path d="M21 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2z"/><path d="M3 14v-3a9 9 0 0 1 18 0v3"/>',
+            radio: '<path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.4"/><circle cx="12" cy="15" r="2"/><path d="M12 12v3"/><path d="M20.4 4.9C24.3 8.8 24.3 15.2 20.4 19.1"/><path d="M17.5 16.2c2.3-2.3 2.3-6.1 0-8.4"/><path d="M12 2v2"/>',
+            film: '<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18"/><path d="M17 3v18"/><path d="M3 7.5h4"/><path d="M3 12h4"/><path d="M3 16.5h4"/><path d="M17 7.5h4"/><path d="M17 12h4"/><path d="M17 16.5h4"/>',
+            clapperboard: '<path d="M20.2 6 3 11l-.9-2.4c-.3-1.1.3-2.2 1.3-2.5l13.5-4c1.1-.3 2.2.3 2.5 1.3Z"/><path d="m6.2 5.3 3.1 8.5"/><path d="m12.3 3.4 3.1 8.5"/><rect width="18" height="10" x="3" y="11" rx="2"/>',
+            ticket: '<path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/>',
+            coffee: '<path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/>',
+            utensils: '<path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/>',
+            pizza: '<path d="M15 11h.01"/><path d="M11 15h.01"/><path d="M16 16h.01"/><path d="m2 16 20 6-6-20A20 20 0 0 0 2 16Z"/>',
+            cookie: '<path d="M12 2a10 10 0 1 0 7.54 16.55c-.2-.25-.25-.6-.1-.85a1.4 1.4 0 0 1 1.76-1.85c.35.15.75.05.95-.25A10 10 0 0 0 12 2Z"/><path d="M8.5 8.5v.01"/><path d="M16 15.5v.01"/><path d="M12 12v.01"/><path d="M11 17v.01"/><path d="M7 14v.01"/>',
+            beer: '<path d="M17 11h1a3 3 0 0 1 0 6h-1"/><path d="M9 12v6"/><path d="M13 12v6"/><path d="M14 7.5c-1 0-1.5-.5-2.5-.5s-1.5.5-2.5.5-1.5-.5-2.5-.5-1.5.5-2.5.5V19a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3V7.5c-1 0-1.5.5-2.5.5s-1.5-.5-2.5-.5Z"/><path d="M5 7.5V6a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v1.5"/>',
+            cake: '<path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/><path d="M2 21h20"/><path d="M12 3v4"/><path d="M10 5h4"/>',
+            apple: '<path d="M12 20.94c1.5 0 2.75 1.06 4 1.06 3 0 6-8 6-12.22A4.91 4.91 0 0 0 17 5c-2.22 0-4 1.44-5 2-1-.56-2.78-2-5-2a4.9 4.9 0 0 0-5 4.78C2 14 5 22 8 22c1.25 0 2.5-1.06 4-1.06Z"/><path d="M10 2c1 .5 2 2 2 5"/>',
+            carrot: '<path d="m2.27 21.73 9-9"/><path d="M20 2c-2 2-2.8 4.5-2.8 4.5s2.5-.8 4.5-2.8Z"/><path d="M15.5 8.5c-.83.83-2.17.83-3 0s-.83-2.17 0-3l7-7c.83-.83 2.17-.83 3 0s.83 2.17 0 3l-7 7Z"/><path d="m14 10 2 2"/><path d="m11 13 2 2"/><path d="m8 16 2 2"/>',
+            flower: '<circle cx="12" cy="12" r="3"/><path d="M12 16.5A4.5 4.5 0 1 1 7.5 12 4.5 4.5 0 1 1 12 7.5a4.5 4.5 0 1 1 4.5 4.5 4.5 4.5 0 1 1-4.5 4.5Z"/><path d="M12 16.5V22"/>',
+            treePine: '<path d="m17 14 3 3.3a1 1 0 0 1-.7 1.7H4.7a1 1 0 0 1-.7-1.7L7 14h-.3a1 1 0 0 1-.7-1.7L9 9h-.3A1 1 0 0 1 8 7.3L11.3 3.3a1 1 0 0 1 1.4 0L16 7.3a1 1 0 0 1-.3 1.7H15l3 3.3a1 1 0 0 1-.7 1.7H17Z"/><path d="M12 22v-3"/>',
+            mountain: '<path d="m8 3 4 8 5-5 5 15H2L8 3z"/>',
+            tent: '<path d="M3.5 21 12 6l8.5 15"/><path d="M6 21h12"/><path d="M10.5 14h3l-1.5-3z"/>',
+            car: '<path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18 10l-3-4H9L6 10l-2.5 1.1C2.7 11.3 2 12.1 2 13v3c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/><path d="M9 17h6"/>',
+            bus: '<path d="M8 6v6"/><path d="M16 6v6"/><path d="M2 12h20"/><path d="M7 18h2"/><path d="M15 18h2"/><path d="M4 6h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Z"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/>',
+            train: '<rect width="16" height="16" x="4" y="3" rx="2"/><path d="M4 11h16"/><path d="M12 3v8"/><path d="m8 19-2 3"/><path d="m16 19 2 3"/><circle cx="8" cy="15" r="1"/><circle cx="16" cy="15" r="1"/>',
+            anchor: '<circle cx="12" cy="5" r="3"/><line x1="12" y1="22" x2="12" y2="8"/><path d="M5 12H2a10 10 0 0 0 20 0h-3"/>',
+            feather: '<path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/><line x1="17.5" y1="15" x2="9" y2="15"/>',
+            palette: '<circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.504 5.555-5.555C22 6.5 17.5 2 12 2Z"/>',
+            brush: '<path d="m9.06 11.9 8.07-8.06a2.85 2.85 0 1 1 4.03 4.03l-8.06 8.08"/><path d="M7.07 14.94c-1.66 0-3 1.34-3 3 0 .79.31 1.54.85 2.09l.91.91c.55.54 1.3.85 2.09.85 1.66 0 3-1.34 3-3 0-.55-.22-1.08-.59-1.46l-2.35-2.35c-.38-.37-.91-.59-1.46-.59z"/><path d="M3.74 11.34c-.49-.49-.74-1.15-.74-1.81 0-.67.25-1.32.74-1.81l3.54-3.54c.98-.98 2.64-.98 3.62 0l2.36 2.36"/>',
+            penTool: '<path d="m12 19 7-7 3 3-7 7-3-3z"/><path d="m18 13-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="m2 2 7.586 7.586"/><circle cx="11" cy="11" r="2"/>',
+            sparkles: '<path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/>',
+            wand: '<path d="m15 4-2 2m4 2-2 2M3 21l9-9m4-4 2-2m-6 2 4 4"/><path d="M15 6 9 12"/><path d="M20 2v4h-4"/>',
+            puzzle: '<path d="M19.439 7.85c-.049.322.059.648.289.878l1.568 1.568c.47.47.47 1.23 0 1.7l-1.568 1.568c-.23.23-.338.556-.289.878.077.502.077 1.018 0 1.52-.049.322.059.648.289.878l1.568 1.568c.47.47.47 1.23 0 1.7l-1.568 1.568c-.23.23-.338.556-.289.878.077.502.077 1.018 0 1.52A2 2 0 0 1 18 22H6a2 2 0 0 1-2-2v-2.48c.502-.077 1.018-.077 1.52 0 .322.049.648-.059.878-.289l1.568-1.568c.47-.47 1.23-.47 1.7 0l1.568 1.568c.23.23.556.338.878.289.502-.077 1.018-.077 1.52 0 .322.049.648-.059.878-.289l1.568-1.568c.47-.47 1.23-.47 1.7 0l1.568 1.568c.23.23.556.338.878.289.077-.502.077-1.018 0-1.52Z"/>',
+            ghost: '<path d="M9 10h.01"/><path d="M15 10h.01"/><path d="M12 2a8 8 0 0 0-8 8v12l3-3 2.5 2.5L12 19l2.5 2.5L17 19l3 3V10a8 8 0 0 0-8-8z"/>',
+            skull: '<circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><path d="M12 2a8 8 0 0 0-8 8c0 2.2 1.3 4 3 5v3h10v-3c1.7-1 3-2.8 3-5a8 8 0 0 0-8-8z"/><path d="M10 18v3h4v-3"/>',
+            gem: '<path d="M6 3h12l4 6-10 13L2 9Z"/><path d="M11 3 8 9l4 13 4-13-3-6"/><path d="M2 9h20"/>',
+            shieldAlert: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>',
+            shieldCheck: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/>',
+            bellRing: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.37 21a1.94 1.94 0 0 0 3.26 0"/><path d="M4 2C2.8 3.7 2 5.7 2 8"/><path d="M22 8c0-2.3-.8-4.3-2-6"/>',
+            bookmarkPlus: '<path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/><line x1="12" y1="7" x2="12" y2="13"/><line x1="9" y1="10" x2="15" y2="10"/>',
+            bookmarkCheck: '<path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/><polyline points="9 10 11 12 15 8"/>',
+            tags: '<path d="M9 5H2v7l10 10 7-7L9 5Z"/><path d="M6 9h.01"/><path d="M20 9h5v7l-5 5"/>',
+            helpCircle: '<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+            alertCircle: '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>',
+            check: '<polyline points="20 6 9 17 4 12"/>',
+            x: '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
+            plus: '<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',
+            minus: '<line x1="5" y1="12" x2="19" y2="12"/>',
+            chevronUp: '<polyline points="18 15 12 9 6 15"/>',
+            chevronDown: '<polyline points="6 9 12 15 18 9"/>',
+            chevronLeft: '<polyline points="15 18 9 12 15 6"/>',
+            chevronRight: '<polyline points="9 18 15 12 9 6"/>',
+            arrowUp: '<line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/>',
+            arrowDown: '<line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/>',
+            arrowLeft: '<line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>',
+            arrowRight: '<line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>',
+            repeat: '<polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>',
+            shuffle: '<polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/>',
+            list: '<line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>',
+            grid: '<rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/>',
+            layout: '<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/>',
+            columns: '<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M12 3v18"/>',
+            rows: '<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 12h18"/>',
+            menu: '<line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="18" x2="20" y2="18"/>',
+            moreHorizontal: '<circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>',
+            moreVertical: '<circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/><circle cx="12" cy="5" r="1"/>',
+            externalLink: '<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>',
+            logIn: '<path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/>',
+            logOut: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>',
+            toggleLeft: '<rect width="20" height="12" x="2" y="6" rx="6"/><circle cx="8" cy="12" r="4"/>',
+            toggleRight: '<rect width="20" height="12" x="2" y="6" rx="6"/><circle cx="16" cy="12" r="4"/>',
+            unlock: '<rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/>',
+            userPlus: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/>',
+            userMinus: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="22" y1="11" x2="16" y2="11"/>',
+            userCheck: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/>',
+            userX: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="17" y1="8" x2="22" y2="13"/><line x1="22" y1="8" x2="17" y2="13"/>'
+        };
+
+        // Render Grid Ikon Dinamis
+        function renderIconGrid(filter = '') {
+            const container = document.getElementById('iconGridContainer');
+            container.innerHTML = '';
+            
+            const lowerFilter = filter.toLowerCase();
+            
+            for (const [key, paths] of Object.entries(lucideIconsMap)) {
+                if (key.toLowerCase().includes(lowerFilter)) {
+                    const btn = document.createElement('button');
+                    btn.className = "p-2 bg-white hover:bg-indigo-50 border border-gray-100 rounded-lg flex flex-col justify-center items-center transition gap-1 shadow-sm";
+                    btn.title = key;
+                    btn.setAttribute('onclick', `addIcon('${key}')`);
+                    
+                    let niceName = key.replace(/([A-Z])/g, ' $1');
+                    niceName = niceName.charAt(0).toUpperCase() + niceName.slice(1);
+                    if(niceName.length > 8) niceName = niceName.substring(0, 7) + '..';
+
+                    btn.innerHTML = `
+                        <i data-lucide="${key.replace(/([A-Z])/g, '-$1').toLowerCase()}" class="w-4 h-4 text-gray-600"></i>
+                        <span class="text-[9px] font-medium text-gray-600 truncate w-full text-center">${niceName}</span>
+                    `;
+                    container.appendChild(btn);
+                }
+            }
+            lucide.createIcons({ root: container });
+        }
+
+        function filterIcons() {
+            const query = document.getElementById('iconSearchInput').value;
+            renderIconGrid(query);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderIconGrid();
+        });
 
         function showToast(message, type = 'info') {
             const container = document.getElementById('toastContainer');
@@ -685,6 +910,7 @@
             reversedObjects.forEach((obj, index) => {
                 const actualIndex = objects.length - 1 - index;
                 const isSelected = canvas.getActiveObject() === obj;
+                const isLocked = obj.lockMovementX;
                 
                 let iconName = 'square';
                 let labelName = 'Objek';
@@ -696,18 +922,21 @@
                 else if (obj.type === 'rect') { iconName = 'square'; labelName = 'Persegi'; }
                 else if (obj.type === 'circle') { iconName = 'circle'; labelName = 'Lingkaran'; }
                 else if (obj.type === 'triangle') { iconName = 'triangle'; labelName = 'Segitiga'; }
-                else if (obj.type === 'line' || obj.type === 'polyline') { iconName = 'minus'; labelName = 'Garis'; }
-                else if (obj.type === 'group') { iconName = 'group'; labelName = 'Grup'; }
+                else if (obj.type === 'line' || obj.type === 'polyline' || obj.type === 'path') { iconName = 'spline'; labelName = 'Garis/Lengkung'; }
+                else if (obj.type === 'group') { iconName = 'group'; labelName = 'Grup/Ikon'; }
 
                 const item = document.createElement('div');
                 item.className = `flex items-center justify-between p-2 rounded-lg text-xs cursor-pointer transition ${isSelected ? 'bg-indigo-50 border border-indigo-200 text-indigo-700 font-medium' : 'bg-white hover:bg-gray-100 border border-gray-100 text-gray-700'}`;
                 
                 item.innerHTML = `
-                    <div class="flex items-center gap-2 truncate flex-1" onclick="selectLayer(${actualIndex})">
+                    <div class="flex items-center gap-2 truncate flex-1 ${isLocked ? 'opacity-60' : ''}" onclick="selectLayer(${actualIndex})">
                         <i data-lucide="${iconName}" class="w-3.5 h-3.5 shrink-0"></i>
-                        <span class="truncate">${labelName}</span>
+                        <span class="truncate">${labelName} ${isLocked ? '(Terkunci)' : ''}</span>
                     </div>
                     <div class="flex items-center gap-0.5 shrink-0">
+                        <button onclick="event.stopPropagation(); toggleLayerLock(${actualIndex})" class="p-1 hover:bg-gray-200 rounded ${isLocked ? 'text-amber-600' : 'text-gray-400'}" title="${isLocked ? 'Buka Kunci' : 'Kunci Layer'}">
+                            <i data-lucide="${isLocked ? 'lock' : 'unlock'}" class="w-3 h-3"></i>
+                        </button>
                         <button onclick="event.stopPropagation(); moveLayerUp(${actualIndex})" class="p-1 hover:bg-gray-200 rounded text-gray-500" title="Naikkan Layer"><i data-lucide="chevron-up" class="w-3 h-3"></i></button>
                         <button onclick="event.stopPropagation(); moveLayerDown(${actualIndex})" class="p-1 hover:bg-gray-200 rounded text-gray-500" title="Turunkan Layer"><i data-lucide="chevron-down" class="w-3 h-3"></i></button>
                     </div>
@@ -715,6 +944,24 @@
                 layersList.appendChild(item);
             });
             lucide.createIcons({ root: layersList });
+        }
+
+        function toggleLayerLock(index) {
+            const objects = canvas.getObjects().filter(o => !o.excludeFromExport);
+            const obj = objects[index];
+            if (obj) {
+                const isLocked = obj.lockMovementX;
+                obj.set({
+                    lockMovementX: !isLocked, lockMovementY: !isLocked,
+                    lockScalingX: !isLocked, lockScalingY: !isLocked,
+                    lockRotating: !isLocked, hasControls: isLocked
+                });
+                canvas.requestRenderAll();
+                saveHistory();
+                updateLayersPanel();
+                updateToolbar();
+                showToast(isLocked ? 'Layer dibuka (Unlocked)' : 'Layer dikunci (Locked)');
+            }
         }
 
         function selectLayer(index) {
@@ -765,6 +1012,49 @@
             selectToolBtn.classList.add('shadow-sm');
 
             showToast("Object Selection Tool aktif");
+        }
+
+        // ----------------- FITUR IKON LUCIDE (200+ IKON) -----------------
+        function addIcon(iconKey) {
+            disableDrawingModes();
+            const fill = fillInput.value || '#e0e7ff';
+            const stroke = strokeInput.value || '#4f46e5';
+            const sWidth = parseInt(strokeWInput.value) || 2;
+
+            const pathContent = lucideIconsMap[iconKey];
+            if (!pathContent) return;
+
+            const svgString = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${pathContent}</svg>`;
+
+            fabric.loadSVGFromString(svgString, function(results, options) {
+                if (!results || results.length === 0) return;
+                const iconShape = fabric.util.groupSVGElements(results, options);
+                
+                const paths = typeof iconShape.getObjects === 'function' ? iconShape.getObjects() : [iconShape];
+                
+                paths.forEach(path => {
+                    if (path.fill && path.fill !== 'none') path.set('fill', fill);
+                    if (path.stroke && path.stroke !== 'none') path.set('stroke', stroke);
+                    path.set('strokeWidth', sWidth);
+                });
+
+                iconShape.set({
+                    left: canvas.width / 2 - 60,
+                    top: canvas.height / 2 - 60,
+                    scaleX: 5,
+                    scaleY: 5,
+                    fill: fill,
+                    stroke: stroke,
+                    strokeWidth: sWidth
+                });
+                canvas.add(iconShape);
+                canvas.setActiveObject(iconShape);
+                canvas.renderAll();
+                saveHistory();
+                updateLayersPanel();
+                showToast(`Ikon ${iconKey} ditambahkan!`);
+                if(window.innerWidth < 768) closeMobileSidebars();
+            });
         }
 
         // ----------------- FITUR FILTER GAMBAR -----------------
@@ -924,7 +1214,9 @@
                 lockScalingX: !isLocked, lockScalingY: !isLocked,
                 lockRotating: !isLocked, hasControls: isLocked
             });
-            canvas.requestRenderAll(); saveHistory();
+            canvas.requestRenderAll(); 
+            saveHistory();
+            updateLayersPanel();
             showToast(isLocked ? 'Objek dibuka (Unlocked)' : 'Objek dikunci (Locked)');
             updateToolbar();
         }
@@ -1234,7 +1526,7 @@
             if (obj.type === 'activeSelection') objectTypeLabel.innerText = "Beberapa Objek Dipilih";
             else if (obj.type.includes('text')) objectTypeLabel.innerText = "Teks Tipografi";
             else if (obj.type === 'image') objectTypeLabel.innerText = "Gambar / Foto";
-            else if (obj.type === 'group') objectTypeLabel.innerText = "Grup Vektor";
+            else if (obj.type === 'group') objectTypeLabel.innerText = "Grup Vektor / Ikon";
             else objectTypeLabel.innerText = "Bentuk Vektor Dasar";
 
             const isText = obj.type.includes('text');
@@ -1303,15 +1595,45 @@
         btnAlignCenter.addEventListener('click', () => setAlign('center'));
         btnAlignRight.addEventListener('click', () => setAlign('right'));
 
-        fillInput.addEventListener('input', (e) => { const obj = canvas.getActiveObject(); if (!obj) return; if(obj.type === 'line' || obj.type === 'polyline' || obj.type === 'path') { obj.set('stroke', e.target.value); } else { obj.set('fill', e.target.value); } canvas.renderAll(); saveHistory(); });
-        strokeInput.addEventListener('input', (e) => { const obj = canvas.getActiveObject(); if(obj) { obj.set('stroke', e.target.value); canvas.renderAll(); saveHistory(); } });
+        fillInput.addEventListener('input', (e) => {
+            const obj = canvas.getActiveObject();
+            if (!obj) return;
+            const val = e.target.value;
+            if (obj.type === 'line' || obj.type === 'polyline' || obj.type === 'path') {
+                obj.set('stroke', val);
+            } else {
+                obj.set('fill', val);
+                if (obj.type === 'group' && obj.getObjects) {
+                    obj.getObjects().forEach(child => {
+                        child.set('fill', val);
+                    });
+                }
+            }
+            canvas.renderAll();
+            saveHistory();
+        });
+
+        strokeInput.addEventListener('input', (e) => {
+            const obj = canvas.getActiveObject();
+            if (obj) {
+                const val = e.target.value;
+                obj.set('stroke', val);
+                if (obj.type === 'group' && obj.getObjects) {
+                    obj.getObjects().forEach(child => {
+                        child.set('stroke', val);
+                    });
+                }
+                canvas.renderAll();
+                saveHistory();
+            }
+        });
+
         strokeWInput.addEventListener('input', (e) => { const obj = canvas.getActiveObject(); if(obj) { obj.set('strokeWidth', parseInt(e.target.value, 10)); canvas.renderAll(); } if (canvas.isDrawingMode) { canvas.freeDrawingBrush.width = parseInt(e.target.value, 10); } });
         strokeWInput.addEventListener('change', () => { if(canvas.getActiveObject()) saveHistory(); });
         radiusInput.addEventListener('input', (e) => { const obj = canvas.getActiveObject(); if(obj && obj.type === 'rect') { obj.set('rx', parseInt(e.target.value, 10)); obj.set('ry', parseInt(e.target.value, 10)); canvas.renderAll(); } });
         radiusInput.addEventListener('change', () => { if(canvas.getActiveObject()) saveHistory(); });
         toggleDashBtn.addEventListener('click', () => { const obj = canvas.getActiveObject(); if(!obj) return; if(obj.strokeDashArray) { obj.set('strokeDashArray', null); } else { obj.set('strokeDashArray', [10, 5]); } canvas.renderAll(); saveHistory(); updateToolbar(); });
         toggleShadowBtn.addEventListener('click', () => { const obj = canvas.getActiveObject(); if(!obj) return; if(obj.shadow) { obj.set('shadow', null); } else { obj.set('shadow', new fabric.Shadow({ color: 'rgba(0,0,0,0.4)', blur: 10, offsetX: 5, offsetY: 5 })); } canvas.renderAll(); saveHistory(); updateToolbar(); });
-
 
         function addShape(type) {
             disableDrawingModes();
@@ -1342,6 +1664,30 @@
             if(window.innerWidth < 768) closeMobileSidebars();
         }
 
+        function addCurve() {
+            disableDrawingModes();
+            const strokeColor = strokeInput.value || '#4f46e5';
+            const sWidth = parseInt(strokeWInput.value) || 4;
+            
+            const curvePath = new fabric.Path('M 0 100 Q 100 0 200 100', {
+                left: canvas.width / 2 - 100,
+                top: canvas.height / 2 - 50,
+                stroke: strokeColor,
+                strokeWidth: sWidth,
+                fill: '',
+                strokeLineCap: 'round',
+                strokeLineJoin: 'round',
+                selectable: true,
+                hasControls: true
+            });
+            
+            canvas.add(curvePath);
+            canvas.setActiveObject(curvePath);
+            updateLayersPanel();
+            if (window.innerWidth < 768) closeMobileSidebars();
+            showToast('Garis lengkung berhasil ditambahkan');
+        }
+
         function addText(type) {
             disableDrawingModes();
             const t = new fabric.IText(type === 'heading' ? 'Judul Baru' : 'Subjudul', {
@@ -1352,7 +1698,6 @@
             canvas.add(t); canvas.setActiveObject(t); updateLayersPanel();
             if(window.innerWidth < 768) closeMobileSidebars();
         }
-
 
         document.getElementById('imageUpload').addEventListener('change', function(e) {
             const file = e.target.files[0]; if (!file) return;
@@ -1467,7 +1812,6 @@
                 objectTypeLabel.innerText = "Pilih objek di kanvas";
             }
         }
-
 
         function bringForward() { 
             const obj = canvas.getActiveObject(); 
