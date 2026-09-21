@@ -26,12 +26,6 @@ const game = [
 
 ]
 const software = [
-    // {
-    //     title: "ZTL Designer",
-    //     desc: "Sofware untuk Design Printer Zebra ",
-    //     icon: "assets/zplstudio.png",
-    //     link: "ztldesigner/ztldesigner.html"
-    // },
     {
         title: "GLB Viewer",
         desc: "Sofware untuk Melihat file 3D GLB",
